@@ -1,38 +1,70 @@
 ﻿@model IEnumerable<DiscussionForum.Models.DiscussionBoard>
 
 @{
-    ViewData["Title"] = "Discussion Boards";
+    ViewData["Title"] = "Discussion Forums";
 }
 
-<div class="container mt-4">
+<link rel="stylesheet" href="~/css/discussion-board.css" />
 
-    <h1>Discussion Boards</h1>
+<div class="container discussion-page">
 
-    <p>Welcome to the discussion forum.</p>
+    <div class="discussion-hero">
 
-    <a asp-action="Create" class="btn btn-primary mb-3">
-        Create Discussion Board
-    </a>
+        <h1>Discussion Forums</h1>
+
+        <p>
+            Connect with your classmates, share ideas,
+            ask questions, and participate in course discussions.
+        </p>
+
+        <a asp-action="Create" class="btn create-board-btn">
+            + Create Discussion Board
+        </a>
+
+    </div>
+
 
     @if (!Model.Any())
     {
-        <p>No discussion boards have been created yet.</p>
+        <div class="empty-discussion">
+            <h4>No Discussion Boards Yet</h4>
+            <p>Create your first discussion board to get started.</p>
+        </div>
     }
     else
     {
-        <div class="list-group">
+        <div class="row g-4">
 
             @foreach (var board in Model)
             {
-                <div class="list-group-item mb-2">
+                <div class="col-md-6 col-lg-4">
 
-                    <h4>@board.Title</h4>
+                    <div class="discussion-card">
 
-                    <p>@board.Description</p>
+                        <h4>@board.Title</h4>
 
-                    <small>
-                        Course: @board.CourseId
-                    </small>
+                        <p class="discussion-description">
+                            @board.Description
+                        </p>
+
+                        <div class="discussion-info">
+
+                            <strong>Course:</strong>
+                            @board.CourseId
+
+                            <br />
+
+                            <strong>Created:</strong>
+                            @board.CreatedDate.ToString("MMM dd, yyyy")
+
+                        </div>
+
+                        <a href="#"
+                           class="btn btn-outline-primary view-discussion-btn">
+                            View Discussion →
+                        </a>
+
+                    </div>
 
                 </div>
             }

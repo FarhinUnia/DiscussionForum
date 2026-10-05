@@ -1,0 +1,193 @@
+﻿/* Discussion Forum Page */
+
+/* ================================
+   Discussion Forum
+   ================================ */
+
+.discussion-page {
+    padding: 50px 0 70px;
+}
+
+/* Header */
+
+.discussion-hero {
+    background: linear-gradient(135deg, #0d6efd, #4f8dfd);
+    color: white;
+    border-radius: 18px;
+    padding: 40px;
+    margin-bottom: 40px;
+    box-shadow: 0 10px 30px rgba(13, 110, 253, 0.20);
+}
+
+    .discussion-hero h1 {
+        font-size: 36px;
+        font-weight: 700;
+        margin-bottom: 10px;
+    }
+
+    .discussion-hero p {
+        margin: 0;
+        font-size: 17px;
+        opacity: 0.9;
+    }
+
+/* Create button */
+
+.create-board-btn {
+    background: white;
+    color: #0d6efd;
+    border: none;
+    padding: 12px 22px;
+    border-radius: 10px;
+    font-weight: 600;
+    margin-top: 25px;
+}
+
+    .create-board-btn:hover {
+        background: #f1f5ff;
+        color: #084298;
+    }
+
+/* Board cards */
+
+.discussion-card {
+    background: white;
+    border: none;
+    border-radius: 16px;
+    padding: 28px;
+    height: 100%;
+    box-shadow: 0 4px 18px rgba(0, 0, 0, 0.08);
+    transition: all 0.25s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+    .discussion-card::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 5px;
+        background: #0d6efd;
+    }
+
+    .discussion-card:hover {
+        transform: translateY(-7px);
+        box-shadow: 0 12px 30px rgba(0, 0, 0, 0.14);
+    }
+
+    .discussion-card h4 {
+        font-size: 21px;
+        font-weight: 700;
+        margin-top: 8px;
+        margin-bottom: 14px;
+    }
+
+.discussion-description {
+    color: #6c757d;
+    line-height: 1.6;
+    min-height: 55px;
+}
+
+/* Course information */
+
+.discussion-info {
+    background: #f7f9fc;
+    border-radius: 10px;
+    padding: 12px 15px;
+    margin-top: 20px;
+    font-size: 14px;
+    color: #555;
+}
+
+    .discussion-info strong {
+        color: #212529;
+    }
+
+/* View button */
+
+.view-discussion-btn {
+    display: inline-block;
+    margin-top: 20px;
+    padding: 9px 18px;
+    border-radius: 8px;
+    font-weight: 600;
+    text-decoration: none;
+}
+
+/* Empty state */
+
+.empty-discussion {
+    text-align: center;
+    background: #f8f9fa;
+    border-radius: 15px;
+    padding: 50px;
+    color: #6c757d;
+}
+
+/* ================================
+   Create Discussion Board
+   ================================ */
+
+.create-page {
+    padding: 50px 0 70px;
+}
+
+.create-header {
+    background: linear-gradient(135deg, #0d6efd, #4f8dfd);
+    color: white;
+    border-radius: 18px 18px 0 0;
+    padding: 30px 35px;
+}
+
+    .create-header h1 {
+        font-size: 30px;
+        font-weight: 700;
+        margin-bottom: 8px;
+    }
+
+    .create-header p {
+        margin: 0;
+        opacity: 0.9;
+    }
+
+.create-form-card {
+    background: white;
+    padding: 35px;
+    border-radius: 0 0 18px 18px;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+}
+
+    .create-form-card .form-label {
+        font-weight: 600;
+        margin-bottom: 8px;
+    }
+
+    .create-form-card .form-control {
+        border: 1px solid #dfe3e8;
+        border-radius: 9px;
+        padding: 11px 13px;
+    }
+
+        .create-form-card .form-control:focus {
+            border-color: #0d6efd;
+            box-shadow: 0 0 0 3px rgba(13, 110, 253, 0.12);
+        }
+
+    .create-form-card textarea {
+        min-height: 130px;
+        resize: vertical;
+    }
+
+.create-actions {
+    margin-top: 25px;
+    display: flex;
+    gap: 10px;
+}
+
+    .create-actions .btn {
+        padding: 10px 22px;
+        border-radius: 8px;
+        font-weight: 600;
+    }

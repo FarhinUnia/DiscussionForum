@@ -4,29 +4,88 @@
     ViewData["Title"] = "Create Discussion Board";
 }
 
-<div class="container mt-4">
-    <h1>Create Discussion Board</h1>
+<link rel="stylesheet" href="~/css/discussion-board.css" />
 
-    <form asp-action="Create" method="post">
+<div class="container create-page">
 
-        <div class="mb-3">
-            <label asp-for="CourseId" class="form-label"></label>
-            <input asp-for="CourseId" class="form-control" />
+    <div class="row justify-content-center">
+
+        <div class="col-lg-8">
+
+            <div class="create-header">
+
+                <h1>Create Discussion Board</h1>
+
+                <p>
+                    Create a new discussion space for your course.
+                </p>
+
+            </div>
+
+
+            <div class="create-form-card">
+
+                <form asp-action="Create" method="post">
+
+                    <div class="mb-4">
+
+                        <label asp-for="CourseId" class="form-label">
+                            Course ID
+                        </label>
+
+                        <input asp-for="CourseId"
+                               class="form-control"
+                               placeholder="Enter course ID" />
+
+                    </div>
+
+
+                    <div class="mb-4">
+
+                        <label asp-for="Title" class="form-label">
+                            Discussion Board Title
+                        </label>
+
+                        <input asp-for="Title"
+                               class="form-control"
+                               placeholder="e.g., General Discussion" />
+
+                    </div>
+
+
+                    <div class="mb-4">
+
+                        <label asp-for="Description" class="form-label">
+                            Description
+                        </label>
+
+                        <textarea asp-for="Description"
+                                  class="form-control"
+                                  placeholder="Enter a short description for this discussion board"></textarea>
+
+                    </div>
+
+
+                    <div class="create-actions">
+
+                        <button type="submit"
+                                class="btn btn-primary">
+                            Create Board
+                        </button>
+
+                        <a asp-action="Index"
+                           class="btn btn-outline-secondary">
+                            Cancel
+                        </a>
+
+                    </div>
+
+                </form>
+
+            </div>
+
         </div>
 
-        <div class="mb-3">
-            <label asp-for="Title" class="form-label"></label>
-            <input asp-for="Title" class="form-control" />
-        </div>
+    </div>
 
-        <div class="mb-3">
-            <label asp-for="Description" class="form-label"></label>
-            <textarea asp-for="Description" class="form-control"></textarea>
-        </div>
-
-        <button type="submit" class="btn btn-primary">Create Board</button>
-
-        <a asp-action="Index" class="btn btn-secondary">Cancel</a>
-
-    </form>
 </div>
