@@ -1,0 +1,32 @@
+﻿@model DiscussionForum.Models.DiscussionBoard
+
+@{
+    ViewData["Title"] = "Create Discussion Board";
+}
+
+<div class="container mt-4">
+    <h1>Create Discussion Board</h1>
+
+    <form asp-action="Create" method="post">
+
+        <div class="mb-3">
+            <label asp-for="CourseId" class="form-label"></label>
+            <input asp-for="CourseId" class="form-control" />
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="Title" class="form-label"></label>
+            <input asp-for="Title" class="form-control" />
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="Description" class="form-label"></label>
+            <textarea asp-for="Description" class="form-control"></textarea>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Create Board</button>
+
+        <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+
+    </form>
+</div>

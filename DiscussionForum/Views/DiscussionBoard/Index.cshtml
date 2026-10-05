@@ -1,0 +1,43 @@
+﻿@model IEnumerable<DiscussionForum.Models.DiscussionBoard>
+
+@{
+    ViewData["Title"] = "Discussion Boards";
+}
+
+<div class="container mt-4">
+
+    <h1>Discussion Boards</h1>
+
+    <p>Welcome to the discussion forum.</p>
+
+    <a asp-action="Create" class="btn btn-primary mb-3">
+        Create Discussion Board
+    </a>
+
+    @if (!Model.Any())
+    {
+        <p>No discussion boards have been created yet.</p>
+    }
+    else
+    {
+        <div class="list-group">
+
+            @foreach (var board in Model)
+            {
+                <div class="list-group-item mb-2">
+
+                    <h4>@board.Title</h4>
+
+                    <p>@board.Description</p>
+
+                    <small>
+                        Course: @board.CourseId
+                    </small>
+
+                </div>
+            }
+
+        </div>
+    }
+
+</div>
