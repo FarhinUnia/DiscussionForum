@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using DiscussionForum.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace DiscussionForum.Data
 {
@@ -8,5 +9,7 @@ namespace DiscussionForum.Data
             : base(options)
         {
         }
+
+        public DbSet<DiscussionBoard> DiscussionBoards { get; set; }
     }
 }
