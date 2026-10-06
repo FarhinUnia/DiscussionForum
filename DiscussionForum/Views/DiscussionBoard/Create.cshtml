@@ -34,8 +34,12 @@
                         </label>
 
                         <input asp-for="CourseId"
+                               type="number"
+                               min="1"
                                class="form-control"
                                placeholder="Enter course ID" />
+
+                        <span asp-validation-for="CourseId" class="text-danger"></span>
 
                     </div>
 
@@ -50,6 +54,8 @@
                                class="form-control"
                                placeholder="e.g., General Discussion" />
 
+                        <span asp-validation-for="Title" class="text-danger"></span>
+
                     </div>
 
 
@@ -62,13 +68,14 @@
                         <textarea asp-for="Description"
                                   class="form-control"
                                   placeholder="Enter a short description for this discussion board"></textarea>
-
+                        <span asp-validation-for="Description" class="text-danger"></span>
                     </div>
 
 
                     <div class="create-actions">
 
                         <button type="submit"
+                                id="createBoardBtn"
                                 class="btn btn-primary">
                             Create Board
                         </button>
@@ -89,3 +96,27 @@
     </div>
 
 </div>
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+
+    <script>
+        function checkForm() {
+            var courseId = $("#CourseId").val();
+            var title = $("#Title").val().trim();
+            var description = $("#Description").val().trim();
+
+            var valid =
+                courseId >= 1 &&
+                title.length >= 3 &&
+                title.length <= 100 &&
+                description.length >= 5 &&
+                description.length <= 500;
+
+            $("#createBoardBtn").prop("disabled", !valid);
+        }
+
+        $("#CourseId, #Title, #Description").on("input", checkForm);
+
+        checkForm();
+    </script>
+}
