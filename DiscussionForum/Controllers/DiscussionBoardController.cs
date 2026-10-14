@@ -2,6 +2,7 @@
 using DiscussionForum.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Linq;
+using Microsoft.EntityFrameworkCore;
 
 namespace DiscussionForum.Controllers
 {
@@ -41,5 +42,20 @@ namespace DiscussionForum.Controllers
 
             return View(board);
         }
+
+
+        public async Task<IActionResult> ViewDiscussion(int id)
+        {
+            var board = await _context.DiscussionBoards
+                .FirstOrDefaultAsync(b => b.BoardId == id);
+
+            if (board == null)
+            {
+                return NotFound();
+            }
+
+            return View(board);
+        }
+
     }
 }

@@ -59,10 +59,12 @@
 
                         </div>
 
-                        <a href="#"
-                           class="btn btn-outline-primary view-discussion-btn">
-                            View Discussion →
-                        </a>
+                       <a asp-controller="DiscussionBoard"
+                          asp-action="ViewDiscussion"
+                          asp-route-id="@board.BoardId"
+                           class="btn btn-outline-primary">
+                           View Discussion →
+                         </a>
 
                     </div>
 

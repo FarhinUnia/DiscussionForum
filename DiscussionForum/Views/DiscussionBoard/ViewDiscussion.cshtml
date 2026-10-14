@@ -1,0 +1,24 @@
+﻿
+@model DiscussionForum.Models.DiscussionBoard
+
+@{
+    ViewData["Title"] = "View Discussion";
+}
+
+<h2>@Model.Title</h2>
+
+<p>@Model.Description</p>
+
+<p><strong>Course ID:</strong> @Model.CourseId</p>
+
+<hr />
+
+<h4>Discussion Topics</h4>
+
+<p>Topics for this board will appear here.</p>
+
+<a asp-controller="DiscussionBoard"
+   asp-action="Index"
+   class="btn btn-secondary">
+    Back to Discussion Boards
+</a>
