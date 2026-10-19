@@ -1,28 +1,31 @@
-﻿@model DiscussionForum.Models.Topic
+﻿
+@model DiscussionForum.Models.Topic
 
 @{
     ViewData["Title"] = "Create Topic";
+    ViewData["PageCss"] = "createtopic.css";
 }
 
-<link rel="stylesheet" href="~/css/discussion-board.css" />
-
-<div class="container create-page">
+<div class="container create-topic-page">
     <div class="row justify-content-center">
         <div class="col-lg-8">
 
-            <div class="create-header">
+            <div class="create-topic-hero">
                 <h1>Create Topic</h1>
                 <p>Create a topic for your discussion board.</p>
+
+                <span class="create-topic-board-label">
+                    Discussion Board: @ViewBag.BoardTitle
+                </span>
             </div>
 
-            <div class="create-form-card">
+            <div class="create-topic-form-card">
 
-                <p>
-                    Discussion Board:
-                    <strong>@ViewBag.BoardTitle</strong>
-                </p>
+                <form asp-controller="Topic"
+                      asp-action="Create"
+                      method="post"
+                      id="createTopicForm">
 
-                <form asp-controller="Topic" asp-action="Create" method="post">
                     @Html.AntiForgeryToken()
 
                     <input type="hidden" asp-for="BoardId" />
@@ -63,32 +66,34 @@
                     <div asp-validation-summary="ModelOnly"
                          class="text-danger mb-3"></div>
 
-                    <div class="create-actions">
-                        <button type="submit"
-                                id="createTopicBtn"
-                                class="btn btn-primary"
-                                disabled>
-                            Create Topic
-                        </button>
+                    <div class="create-topic-actions">
+
+                       <button type="submit" id="createTopicBtn" class="btn btn-primary">
+    Create Topic
+</button>
 
                         <a asp-controller="DiscussionBoard"
                            asp-action="ViewDiscussion"
                            asp-route-id="@ViewBag.BoardId"
-                           class="btn btn-outline-secondary">
+                           class="create-topic-cancel">
                             Back to Discussion Board
                         </a>
+
                     </div>
+
                 </form>
+
             </div>
         </div>
     </div>
 </div>
 
+
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
 
     <script>
-        function checkTopicForm() {
+        function checkForm() {
             var title = $("#Title").val().trim();
             var description = $("#Description").val().trim();
 
@@ -101,8 +106,10 @@
             $("#createTopicBtn").prop("disabled", !valid);
         }
 
-        $("#Title, #Description").on("input", checkTopicForm);
+        $(document).ready(function () {
+            $("#Title, #Description").on("input", checkForm);
 
-        checkTopicForm();
+            checkForm();
+        });
     </script>
 }

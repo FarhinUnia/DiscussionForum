@@ -1,56 +1,82 @@
 ﻿@model DiscussionForum.Models.DiscussionBoard
 
 @{
+    ViewData["PageCss"] = "viewdiscussion.css";
     ViewData["Title"] = "View Discussion";
 }
 
-<h2>@Model.Title</h2>
+<div class="view-discussion-page">
 
-<p>@Model.Description</p>
+    <div class="view-discussion-hero">
+        <h1>@Model.Title</h1>
 
-<p><strong>Course ID:</strong> @Model.CourseId</p>
+        <p>@Model.Description</p>
 
-<hr />
+        <span class="view-course-info">
+            Course ID: @Model.CourseId
+        </span>
+    </div>
 
-<h4>Discussion Topics</h4>
+    <div class="topics-section-header">
+        <div>
+            <h2>Discussion Topics</h2>
+            <p>Explore topics and join the conversation.</p>
+        </div>
 
-<a asp-controller="Topic"
-   asp-action="Create"
-   asp-route-boardId="@Model.BoardId"
-   class="btn btn-primary mb-3">
-    Create Topic
-</a>
+        <a asp-controller="Topic"
+           asp-action="Create"
+           asp-route-boardId="@Model.BoardId"
+           class="create-topic-btn">
+            + Create Topic
+        </a>
+    </div>
 
-@if (Model.Topics != null && Model.Topics.Any())
-{
-    <div class="list-group">
+    @if (Model.Topics != null && Model.Topics.Any())
+    {
         @foreach (var topic in Model.Topics.OrderByDescending(t => t.CreatedDate))
         {
-            <div class="list-group-item mb-2">
-                <h5>
+            <div class="view-topic-card">
+
+                <h3>
                     <a asp-controller="Topic"
                        asp-action="Details"
                        asp-route-id="@topic.TopicId">
                         @topic.Title
                     </a>
-                </h5>
-                <p>@topic.Description</p>
-                <small class="text-muted">
-                    Created: @topic.CreatedDate.ToString("yyyy-MM-dd HH:mm")
-                </small>
+                </h3>
+
+                <p class="view-topic-description">
+                    @topic.Description
+                </p>
+
+                <div class="view-topic-footer">
+                    <span>
+                        Created: @topic.CreatedDate.ToString("yyyy-MM-dd HH:mm")
+                    </span>
+
+                    <a asp-controller="Topic"
+                       asp-action="Details"
+                       asp-route-id="@topic.TopicId"
+                       class="view-topic-link">
+                        View Topic →
+                    </a>
+                </div>
+
             </div>
         }
-    </div>
-}
-else
-{
-    <p>No topics have been created for this discussion board yet.</p>
-}
+    }
+    else
+    {
+        <div class="no-topics-message">
+            <h3>No topics yet</h3>
+            <p>Be the first to start a discussion on this board.</p>
+        </div>
+    }
 
-<hr />
+    <a asp-controller="DiscussionBoard"
+       asp-action="Index"
+       class="back-discussions-btn">
+        ← Back to Discussion Boards
+    </a>
 
-<a asp-controller="DiscussionBoard"
-   asp-action="Index"
-   class="btn btn-secondary">
-    Back to Discussion Boards
-</a>
+</div>

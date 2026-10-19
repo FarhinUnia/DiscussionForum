@@ -3,29 +3,57 @@
 
 @{
     ViewData["Title"] = "Topic Details";
+    ViewData["PageCss"] = "topicdetails.css";
 }
 
-<div class="container mt-4">
-    <h2>@Model.Title</h2>
+<div class="topic-details-page">
 
-    <p>@Model.Description</p>
+    <div class="topic-details-hero">
+        <h1>@Model.Title</h1>
 
-    <p>
-        <strong>Discussion Board:</strong>
-        @Model.DiscussionBoard?.Title
-    </p>
+        <p class="topic-details-description">
+            @Model.Description
+        </p>
 
-    <hr />
+        <span class="topic-board-label">
+            Discussion Board: @(Model.DiscussionBoard?.Title ?? "Discussion Board")
+        </span>
+    </div>
 
-    <h4>Replies</h4>
+    <div class="topic-information">
+        <div class="topic-info-card">
+            <span>Topic ID</span>
+            <strong>@Model.TopicId</strong>
+        </div>
 
-    <p>No replies have been posted yet.</p>
+        <div class="topic-info-card">
+            <span>Created On</span>
+            <strong>@Model.CreatedDate.ToString("MMM dd, yyyy")</strong>
+        </div>
+    </div>
 
-    <a asp-controller="DiscussionBoard"
-       asp-action="ViewDiscussion"
-       asp-route-id="@Model.BoardId"
-       class="btn btn-secondary">
-        Back to Discussion Board
-    </a>
+    <div class="topic-replies-section">
+        <h2>Replies</h2>
+
+        <div class="no-replies-message">
+            <h3>No replies yet</h3>
+            <p>Replies will appear here when they are implemented.</p>
+        </div>
+    </div>
+
+    <div class="topic-details-actions">
+        <a asp-controller="DiscussionBoard"
+           asp-action="ViewDiscussion"
+           asp-route-id="@Model.BoardId"
+           class="back-to-board-btn">
+            ← Back to Discussion Board
+        </a>
+
+        <a asp-controller="DiscussionBoard"
+           asp-action="Index"
+           class="back-to-boards-btn">
+            All Discussion Boards
+        </a>
+    </div>
+
 </div>
-

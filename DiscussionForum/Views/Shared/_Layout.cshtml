@@ -8,6 +8,10 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/DiscussionForum.styles.css" asp-append-version="true" />
+    @if (ViewData["PageCss"] != null)
+    {
+        <link rel="stylesheet" href="~/css/@ViewData["PageCss"]" asp-append-version="true" />
+    }
 </head>
 <body>
     <header>
