@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
 
+
 namespace DiscussionForum.Controllers
 {
     public class DiscussionBoardController : Controller
@@ -44,6 +45,8 @@ namespace DiscussionForum.Controllers
         }
 
 
+
+
         public async Task<IActionResult> ViewDiscussion(int id)
         {
             var board = await _context.DiscussionBoards
@@ -53,6 +56,11 @@ namespace DiscussionForum.Controllers
             {
                 return NotFound();
             }
+
+            board.Topics = await _context.Topics
+                .Where(t => t.BoardId == id)
+                .OrderByDescending(t => t.CreatedDate)
+                .ToListAsync();
 
             return View(board);
         }

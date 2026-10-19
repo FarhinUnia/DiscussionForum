@@ -1,0 +1,31 @@
+﻿
+@model DiscussionForum.Models.Topic
+
+@{
+    ViewData["Title"] = "Topic Details";
+}
+
+<div class="container mt-4">
+    <h2>@Model.Title</h2>
+
+    <p>@Model.Description</p>
+
+    <p>
+        <strong>Discussion Board:</strong>
+        @Model.DiscussionBoard?.Title
+    </p>
+
+    <hr />
+
+    <h4>Replies</h4>
+
+    <p>No replies have been posted yet.</p>
+
+    <a asp-controller="DiscussionBoard"
+       asp-action="ViewDiscussion"
+       asp-route-id="@Model.BoardId"
+       class="btn btn-secondary">
+        Back to Discussion Board
+    </a>
+</div>
+

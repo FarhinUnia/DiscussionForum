@@ -1,0 +1,108 @@
+﻿@model DiscussionForum.Models.Topic
+
+@{
+    ViewData["Title"] = "Create Topic";
+}
+
+<link rel="stylesheet" href="~/css/discussion-board.css" />
+
+<div class="container create-page">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+
+            <div class="create-header">
+                <h1>Create Topic</h1>
+                <p>Create a topic for your discussion board.</p>
+            </div>
+
+            <div class="create-form-card">
+
+                <p>
+                    Discussion Board:
+                    <strong>@ViewBag.BoardTitle</strong>
+                </p>
+
+                <form asp-controller="Topic" asp-action="Create" method="post">
+                    @Html.AntiForgeryToken()
+
+                    <input type="hidden" asp-for="BoardId" />
+
+                    <div class="mb-4">
+                        <label asp-for="Title" class="form-label">
+                            Topic Title
+                        </label>
+
+                        <input asp-for="Title"
+                               class="form-control"
+                               minlength="3"
+                               maxlength="100"
+                               required
+                               placeholder="Enter topic title" />
+
+                        <span asp-validation-for="Title"
+                              class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-4">
+                        <label asp-for="Description" class="form-label">
+                            Topic Description
+                        </label>
+
+                        <textarea asp-for="Description"
+                                  class="form-control"
+                                  rows="4"
+                                  minlength="5"
+                                  maxlength="500"
+                                  required
+                                  placeholder="Enter topic description"></textarea>
+
+                        <span asp-validation-for="Description"
+                              class="text-danger"></span>
+                    </div>
+
+                    <div asp-validation-summary="ModelOnly"
+                         class="text-danger mb-3"></div>
+
+                    <div class="create-actions">
+                        <button type="submit"
+                                id="createTopicBtn"
+                                class="btn btn-primary"
+                                disabled>
+                            Create Topic
+                        </button>
+
+                        <a asp-controller="DiscussionBoard"
+                           asp-action="ViewDiscussion"
+                           asp-route-id="@ViewBag.BoardId"
+                           class="btn btn-outline-secondary">
+                            Back to Discussion Board
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+
+    <script>
+        function checkTopicForm() {
+            var title = $("#Title").val().trim();
+            var description = $("#Description").val().trim();
+
+            var valid =
+                title.length >= 3 &&
+                title.length <= 100 &&
+                description.length >= 5 &&
+                description.length <= 500;
+
+            $("#createTopicBtn").prop("disabled", !valid);
+        }
+
+        $("#Title, #Description").on("input", checkTopicForm);
+
+        checkTopicForm();
+    </script>
+}

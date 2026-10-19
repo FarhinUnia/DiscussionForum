@@ -11,5 +11,7 @@ namespace DiscussionForum.Data
         }
 
         public DbSet<DiscussionBoard> DiscussionBoards { get; set; }
+
+        public DbSet<Topic> Topics { get; set; }
     }
 }

@@ -1,5 +1,4 @@
-﻿
-@model DiscussionForum.Models.DiscussionBoard
+﻿@model DiscussionForum.Models.DiscussionBoard
 
 @{
     ViewData["Title"] = "View Discussion";
@@ -15,7 +14,40 @@
 
 <h4>Discussion Topics</h4>
 
-<p>Topics for this board will appear here.</p>
+<a asp-controller="Topic"
+   asp-action="Create"
+   asp-route-boardId="@Model.BoardId"
+   class="btn btn-primary mb-3">
+    Create Topic
+</a>
+
+@if (Model.Topics != null && Model.Topics.Any())
+{
+    <div class="list-group">
+        @foreach (var topic in Model.Topics.OrderByDescending(t => t.CreatedDate))
+        {
+            <div class="list-group-item mb-2">
+                <h5>
+                    <a asp-controller="Topic"
+                       asp-action="Details"
+                       asp-route-id="@topic.TopicId">
+                        @topic.Title
+                    </a>
+                </h5>
+                <p>@topic.Description</p>
+                <small class="text-muted">
+                    Created: @topic.CreatedDate.ToString("yyyy-MM-dd HH:mm")
+                </small>
+            </div>
+        }
+    </div>
+}
+else
+{
+    <p>No topics have been created for this discussion board yet.</p>
+}
+
+<hr />
 
 <a asp-controller="DiscussionBoard"
    asp-action="Index"

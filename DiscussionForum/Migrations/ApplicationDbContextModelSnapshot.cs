@@ -38,15 +38,65 @@ namespace DiscussionForum.Migrations
 
                     b.Property<string>("Description")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
 
                     b.Property<string>("Title")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.HasKey("BoardId");
 
                     b.ToTable("DiscussionBoards");
+                });
+
+            modelBuilder.Entity("DiscussionForum.Models.Topic", b =>
+                {
+                    b.Property<int>("TopicId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("TopicId"));
+
+                    b.Property<int>("BoardId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<int?>("DiscussionBoardBoardId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.HasKey("TopicId");
+
+                    b.HasIndex("DiscussionBoardBoardId");
+
+                    b.ToTable("Topics");
+                });
+
+            modelBuilder.Entity("DiscussionForum.Models.Topic", b =>
+                {
+                    b.HasOne("DiscussionForum.Models.DiscussionBoard", "DiscussionBoard")
+                        .WithMany("Topics")
+                        .HasForeignKey("DiscussionBoardBoardId");
+
+                    b.Navigation("DiscussionBoard");
+                });
+
+            modelBuilder.Entity("DiscussionForum.Models.DiscussionBoard", b =>
+                {
+                    b.Navigation("Topics");
                 });
 #pragma warning restore 612, 618
         }

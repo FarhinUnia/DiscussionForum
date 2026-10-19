@@ -1,4 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Collections.Generic;
+using DiscussionForum.Models;
+
 
 namespace DiscussionForum.Models
 {
@@ -22,5 +25,7 @@ namespace DiscussionForum.Models
         public string Description { get; set; }
 
         public DateTime CreatedDate { get; set; }
+
+        public ICollection<Topic> Topics { get; set; } = new List<Topic>();
     }
 }
