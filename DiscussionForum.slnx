@@ -1,3 +1,4 @@
 <Solution>
+  <Project Path="DiscussionForum.Tests/DiscussionForum.Tests.csproj" Id="1aee65fb-26ef-48b4-84d2-eb9737dc64e4" />
   <Project Path="DiscussionForum/DiscussionForum.csproj" />
 </Solution>
