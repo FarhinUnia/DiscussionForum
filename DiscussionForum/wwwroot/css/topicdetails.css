@@ -239,3 +239,62 @@
             text-align: center;
         }
 }
+
+/* Replies inside another reply */
+.topic-threaded-reply {
+    margin: 16px 0 0 28px;
+    padding: 16px 20px;
+    background: #f5f8ff;
+    border: 1px solid #e1e9f8;
+    border-left: 3px solid #7daaff;
+    border-radius: 10px;
+}
+
+    .topic-threaded-reply p {
+        color: #343a40;
+        font-size: 14px;
+        line-height: 1.6;
+        white-space: pre-wrap;
+        overflow-wrap: anywhere;
+        margin-bottom: 10px;
+    }
+
+    .topic-threaded-reply small {
+        color: #6c757d;
+        font-size: 12px;
+    }
+
+@media (max-width: 600px) {
+    .topic-threaded-reply {
+        margin-left: 12px;
+        padding: 14px;
+    }
+}
+
+/* Reply button */
+.reply-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px 16px;
+    margin-top: 12px;
+    background: #eef4ff;
+    color: #0d6efd;
+    border: 1px solid #cbdcff;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+}
+
+    .reply-button:hover {
+        background: #0d6efd;
+        color: #ffffff;
+        border-color: #0d6efd;
+    }
+
+    .reply-button:focus-visible {
+        outline: 3px solid rgba(13, 110, 253, 0.25);
+        outline-offset: 2px;
+    }

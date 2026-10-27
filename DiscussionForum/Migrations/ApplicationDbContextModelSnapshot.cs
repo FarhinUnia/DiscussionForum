@@ -67,10 +67,15 @@ namespace DiscussionForum.Migrations
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<int?>("ParentReplyId")
+                        .HasColumnType("int");
+
                     b.Property<int>("TopicId")
                         .HasColumnType("int");
 
                     b.HasKey("ReplyId");
+
+                    b.HasIndex("ParentReplyId");
 
                     b.HasIndex("TopicId");
 
@@ -113,11 +118,17 @@ namespace DiscussionForum.Migrations
 
             modelBuilder.Entity("DiscussionForum.Models.Reply", b =>
                 {
+                    b.HasOne("DiscussionForum.Models.Reply", "ParentReply")
+                        .WithMany("ChildReplies")
+                        .HasForeignKey("ParentReplyId");
+
                     b.HasOne("DiscussionForum.Models.Topic", "Topic")
-                        .WithMany()
+                        .WithMany("Replies")
                         .HasForeignKey("TopicId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("ParentReply");
 
                     b.Navigation("Topic");
                 });
@@ -134,6 +145,16 @@ namespace DiscussionForum.Migrations
             modelBuilder.Entity("DiscussionForum.Models.DiscussionBoard", b =>
                 {
                     b.Navigation("Topics");
+                });
+
+            modelBuilder.Entity("DiscussionForum.Models.Reply", b =>
+                {
+                    b.Navigation("ChildReplies");
+                });
+
+            modelBuilder.Entity("DiscussionForum.Models.Topic", b =>
+                {
+                    b.Navigation("Replies");
                 });
 #pragma warning restore 612, 618
         }

@@ -1,5 +1,6 @@
 ﻿
 using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace DiscussionForum.Models
@@ -19,5 +20,14 @@ namespace DiscussionForum.Models
         public int TopicId { get; set; }
 
         public Topic? Topic { get; set; }
+
+        // Null means this is a direct reply to the topic.
+        // A value means this reply belongs to another reply.
+        public int? ParentReplyId { get; set; }
+
+        public Reply? ParentReply { get; set; }
+
+        public ICollection<Reply> ChildReplies { get; set; }
+            = new List<Reply>();
     }
 }

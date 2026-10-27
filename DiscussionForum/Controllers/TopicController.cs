@@ -100,9 +100,13 @@ namespace DiscussionForum.Controllers
         }
 
 
+
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> PostReply(int topicId, string content)
+        public async Task<IActionResult> PostReply(
+            int topicId,
+            string content,
+            int? parentReplyId)
         {
             var topic = await _context.Topics
                 .FirstOrDefaultAsync(t => t.TopicId == topicId);
@@ -114,20 +118,35 @@ namespace DiscussionForum.Controllers
 
             if (string.IsNullOrWhiteSpace(content))
             {
-                ModelState.AddModelError("", "Reply cannot be empty.");
-                return RedirectToAction("Details", new { id = topicId });
+                return BadRequest("Reply cannot be empty.");
             }
 
-            if (content.Trim().Length > 1000)
+            content = content.Trim();
+
+            if (content.Length > 1000)
             {
                 return BadRequest("Reply cannot exceed 1000 characters.");
+            }
+
+            if (parentReplyId.HasValue)
+            {
+                var parentReply = await _context.Replies
+                    .FirstOrDefaultAsync(r =>
+                        r.ReplyId == parentReplyId.Value &&
+                        r.TopicId == topicId);
+
+                if (parentReply == null)
+                {
+                    return BadRequest("The reply you selected was not found.");
+                }
             }
 
             var reply = new Reply
             {
                 TopicId = topicId,
-                Content = content.Trim(),
-                CreatedDate = DateTime.Now
+                Content = content,
+                CreatedDate = DateTime.Now,
+                ParentReplyId = parentReplyId
             };
 
             _context.Replies.Add(reply);
@@ -135,6 +154,7 @@ namespace DiscussionForum.Controllers
 
             return RedirectToAction("Details", new { id = topicId });
         }
+
 
     }
 }
