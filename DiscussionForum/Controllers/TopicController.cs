@@ -88,6 +88,7 @@ namespace DiscussionForum.Controllers
         {
             var topic = await _context.Topics
                 .Include(t => t.DiscussionBoard)
+                .Include(t => t.Replies)
                 .FirstOrDefaultAsync(t => t.TopicId == id);
 
             if (topic == null)
@@ -97,6 +98,44 @@ namespace DiscussionForum.Controllers
 
             return View(topic);
         }
+
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> PostReply(int topicId, string content)
+        {
+            var topic = await _context.Topics
+                .FirstOrDefaultAsync(t => t.TopicId == topicId);
+
+            if (topic == null)
+            {
+                return NotFound("Topic not found.");
+            }
+
+            if (string.IsNullOrWhiteSpace(content))
+            {
+                ModelState.AddModelError("", "Reply cannot be empty.");
+                return RedirectToAction("Details", new { id = topicId });
+            }
+
+            if (content.Trim().Length > 1000)
+            {
+                return BadRequest("Reply cannot exceed 1000 characters.");
+            }
+
+            var reply = new Reply
+            {
+                TopicId = topicId,
+                Content = content.Trim(),
+                CreatedDate = DateTime.Now
+            };
+
+            _context.Replies.Add(reply);
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction("Details", new { id = topicId });
+        }
+
     }
 }
 

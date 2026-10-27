@@ -26,5 +26,7 @@ namespace DiscussionForum.Models
         public DateTime CreatedDate { get; set; } = DateTime.Now;
 
         public DiscussionBoard? DiscussionBoard { get; set; }
+
+        public ICollection<Reply> Replies { get; set; } = new List<Reply>();
     }
 }

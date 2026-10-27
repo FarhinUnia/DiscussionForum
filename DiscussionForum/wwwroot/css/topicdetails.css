@@ -4,7 +4,9 @@
    ================================ */
 
 .topic-details-page {
-    padding: 50px 0 70px;
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 40px 20px 60px;
 }
 
 /* Topic Header */
@@ -12,33 +14,28 @@
 .topic-details-hero {
     background: linear-gradient(135deg, #0d6efd, #4f8dfd);
     color: white;
-    border-radius: 18px;
-    padding: 35px 40px;
-    margin-bottom: 30px;
-    box-shadow: 0 10px 30px rgba(13, 110, 253, 0.20);
+    padding: 32px 38px;
+    border-radius: 16px;
+    box-shadow: 0 8px 25px rgba(13, 110, 253, 0.15);
 }
 
     .topic-details-hero h1 {
-        font-size: 32px;
+        font-size: 30px;
         font-weight: 700;
-        margin-bottom: 15px;
+        margin-bottom: 12px;
         overflow-wrap: anywhere;
     }
 
 .topic-details-description {
-    font-size: 17px;
-    line-height: 1.8;
-    margin-bottom: 22px;
-    opacity: 0.95;
-    white-space: pre-wrap;
-    overflow-wrap: anywhere;
+    font-size: 16px;
+    line-height: 1.6;
+    margin-bottom: 18px;
 }
 
 .topic-board-label {
     display: inline-block;
     background: rgba(255, 255, 255, 0.18);
-    color: white;
-    padding: 8px 14px;
+    padding: 8px 13px;
     border-radius: 8px;
     font-size: 14px;
 }
@@ -48,107 +45,174 @@
 .topic-information {
     display: flex;
     flex-wrap: wrap;
-    gap: 15px;
-    margin-bottom: 35px;
+    gap: 16px;
+    margin: 22px 0 32px;
 }
 
 .topic-info-card {
     flex: 1;
-    min-width: 200px;
+    min-width: 180px;
     background: white;
-    border: 1px solid #e9ecef;
+    padding: 20px 24px;
+    border: 1px solid #e5eaf0;
     border-radius: 12px;
-    padding: 20px;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.04);
 }
 
     .topic-info-card span {
         display: block;
         color: #6c757d;
-        font-size: 14px;
-        margin-bottom: 8px;
+        font-size: 13px;
+        margin-bottom: 7px;
     }
 
     .topic-info-card strong {
         color: #212529;
-        font-size: 16px;
-        overflow-wrap: anywhere;
+        font-size: 18px;
     }
 
 /* Replies Section */
 
 .topic-replies-section {
-    margin-top: 35px;
+    margin-bottom: 32px;
 }
 
-    .topic-replies-section h2 {
-        color: #212529;
-        font-size: 26px;
+    .topic-replies-section h2,
+    .post-reply-section h2 {
+        font-size: 23px;
         font-weight: 700;
+        color: #212529;
         margin-bottom: 20px;
     }
 
+.topic-reply-card {
+    background: white;
+    border: 1px solid #e2e8f0;
+    border-left: 4px solid #0d6efd;
+    border-radius: 10px;
+    padding: 20px 24px;
+    margin-bottom: 14px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+    transition: box-shadow 0.2s ease, transform 0.2s ease;
+}
+
+    .topic-reply-card:hover {
+        box-shadow: 0 7px 18px rgba(0, 0, 0, 0.08);
+        transform: translateY(-2px);
+    }
+
+    .topic-reply-card p {
+        color: #343a40;
+        font-size: 15px;
+        line-height: 1.7;
+        white-space: pre-wrap;
+        overflow-wrap: anywhere;
+        margin-bottom: 12px;
+    }
+
+    .topic-reply-card small {
+        color: #6c757d;
+        font-size: 12px;
+    }
+
+/* Empty Replies Message */
+
 .no-replies-message {
-    background: #f8f9fa;
-    border: 1px dashed #ced4da;
-    border-radius: 14px;
-    padding: 40px 25px;
+    background: #f8faff;
+    border: 1px dashed #cbd8eb;
+    border-radius: 12px;
+    padding: 30px 20px;
     text-align: center;
-    color: #6c757d;
 }
 
     .no-replies-message h3 {
+        font-size: 18px;
         color: #343a40;
-        font-size: 21px;
-        font-weight: 700;
-        margin-bottom: 10px;
+        margin-bottom: 8px;
     }
 
-/* Action Buttons */
+    .no-replies-message p {
+        color: #6c757d;
+        margin-bottom: 0;
+    }
+
+/* Post Reply Form */
+
+.post-reply-section {
+    background: white;
+    border: 1px solid #e2e8f0;
+    border-radius: 14px;
+    padding: 28px;
+    margin-bottom: 32px;
+    box-shadow: 0 5px 18px rgba(0, 0, 0, 0.05);
+}
+
+    .post-reply-section .form-label {
+        color: #343a40;
+        font-weight: 600;
+        margin-bottom: 9px;
+    }
+
+    .post-reply-section .form-control {
+        border: 1px solid #d5dce5;
+        border-radius: 9px;
+        padding: 13px 15px;
+        line-height: 1.6;
+        resize: vertical;
+    }
+
+        .post-reply-section .form-control:focus {
+            border-color: #0d6efd;
+            box-shadow: 0 0 0 3px rgba(13, 110, 253, 0.12);
+        }
+
+    .post-reply-section .btn-primary {
+        background: #0d6efd;
+        border: none;
+        border-radius: 9px;
+        padding: 11px 22px;
+        font-weight: 600;
+    }
+
+        .post-reply-section .btn-primary:hover {
+            background: #084298;
+        }
+
+/* Navigation Buttons */
 
 .topic-details-actions {
     display: flex;
     flex-wrap: wrap;
+    justify-content: space-between;
     gap: 12px;
-    margin-top: 30px;
+    margin-top: 25px;
 }
 
-    .topic-details-actions a {
-        display: inline-block;
-        padding: 10px 18px;
-        border-radius: 9px;
-        font-weight: 600;
-        text-decoration: none;
-        transition: all 0.2s ease;
-    }
-
-.back-to-board-btn {
-    background: #0d6efd;
-    color: white;
-}
-
-    .back-to-board-btn:hover {
-        background: #084298;
-        color: white;
-        transform: translateY(-2px);
-    }
-
+.back-to-board-btn,
 .back-to-boards-btn {
+    display: inline-block;
+    padding: 11px 17px;
+    border: 1px solid #d5dce5;
+    border-radius: 9px;
     background: white;
-    color: #495057;
-    border: 1px solid #ced4da;
+    color: #0d6efd;
+    font-size: 14px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: background 0.2s ease, color 0.2s ease;
 }
 
+    .back-to-board-btn:hover,
     .back-to-boards-btn:hover {
-        background: #f1f3f5;
-        color: #212529;
+        background: #eef4ff;
+        color: #084298;
     }
 
-/* Responsive Design */
+/* Responsive Layout */
 
 @media (max-width: 600px) {
     .topic-details-page {
-        padding: 25px 0 45px;
+        padding: 25px 14px 40px;
     }
 
     .topic-details-hero {
@@ -156,14 +220,22 @@
     }
 
         .topic-details-hero h1 {
-            font-size: 26px;
+            font-size: 25px;
         }
 
-    .topic-information {
+    .topic-info-card {
+        min-width: 100%;
+    }
+
+    .post-reply-section {
+        padding: 20px;
+    }
+
+    .topic-details-actions {
         flex-direction: column;
     }
 
-    .topic-info-card {
-        min-width: 0;
-    }
+        .topic-details-actions a {
+            text-align: center;
+        }
 }

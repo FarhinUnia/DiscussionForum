@@ -51,6 +51,32 @@ namespace DiscussionForum.Migrations
                     b.ToTable("DiscussionBoards");
                 });
 
+            modelBuilder.Entity("DiscussionForum.Models.Reply", b =>
+                {
+                    b.Property<int>("ReplyId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ReplyId"));
+
+                    b.Property<string>("Content")
+                        .IsRequired()
+                        .HasMaxLength(1000)
+                        .HasColumnType("nvarchar(1000)");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("TopicId")
+                        .HasColumnType("int");
+
+                    b.HasKey("ReplyId");
+
+                    b.HasIndex("TopicId");
+
+                    b.ToTable("Replies");
+                });
+
             modelBuilder.Entity("DiscussionForum.Models.Topic", b =>
                 {
                     b.Property<int>("TopicId")
@@ -83,6 +109,17 @@ namespace DiscussionForum.Migrations
                     b.HasIndex("DiscussionBoardBoardId");
 
                     b.ToTable("Topics");
+                });
+
+            modelBuilder.Entity("DiscussionForum.Models.Reply", b =>
+                {
+                    b.HasOne("DiscussionForum.Models.Topic", "Topic")
+                        .WithMany()
+                        .HasForeignKey("TopicId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Topic");
                 });
 
             modelBuilder.Entity("DiscussionForum.Models.Topic", b =>
