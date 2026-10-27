@@ -8,20 +8,27 @@
 
 <div class="container discussion-page">
 
-    <div class="discussion-hero">
 
-        <h1>Discussion Forums</h1>
+<div class="discussion-hero">
 
-        <p>
-            Connect with your classmates, share ideas,
-            ask questions, and participate in course discussions.
-        </p>
-
-        <a asp-action="Create" class="btn create-board-btn">
-            + Create Discussion Board
-        </a>
-
+    <div class="row align-items-center">
+        <div class="col">
+            <h1>Discussion Forums</h1>
+            <p>
+                Connect with your classmates, share ideas, ask questions,
+                and participate in course discussions.
+            </p>
+        </div>
+        <div class="col-auto ms-auto">
+            <a asp-controller="DiscussionBoard"
+               asp-action="Create"
+               asp-route-courseId="@ViewBag.CourseId"
+               class="create-board-btn">
+                + Create Discussion Board
+            </a>
+        </div>
     </div>
+</div>
 
 
     @if (!Model.Any())
@@ -74,4 +81,11 @@
         </div>
     }
 
+</div>
+     <div class="mb-3">
+    <a asp-controller="Courses"
+       asp-action="Index"
+       class="back-to-courses-btn">
+        &larr; Back to Courses
+    </a>
 </div>

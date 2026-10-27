@@ -1,0 +1,62 @@
+﻿@model List<DiscussionForum.Data.CourseInfo>
+
+@{
+    ViewData["Title"] = "My Courses";
+}
+
+<div class="courses-page">
+    <div class="courses-header">
+        <div>
+            <span class="courses-eyebrow">LEARNING DASHBOARD</span>
+            <h1>My Courses</h1>
+            <p>Explore your courses and join the conversation.</p>
+        </div>
+
+        <div class="courses-count">
+            <span class="count-number">@Model.Count</span>
+            <span class="count-label">My Courses</span>
+        </div>
+    </div>
+
+    <div class="courses-section-heading">
+        <div>
+            <h2>Your Learning Space</h2>
+            <p>Select a course to explore its discussion boards.</p>
+        </div>
+    </div>
+
+    <div class="row g-4">
+        @foreach (var course in Model)
+        {
+            <div class="col-md-6 col-xl-4">
+                <div class="course-card">
+                    <div class="course-card-top">
+                        <span class="course-icon">
+                            <span class="course-book-icon" aria-hidden="true">▤</span>
+                        </span>
+                        <span class="course-label">COURSE</span>
+                    </div>
+
+                    <div class="course-card-body">
+                        <p class="course-code">@course.CourseCode</p>
+                        <h3>@course.CourseName</h3>
+
+                        <div class="course-card-footer">
+                            <span class="course-action-text">
+                                View discussions
+                            </span>
+
+                            <a asp-controller="DiscussionBoard"
+                               asp-action="Index"
+                               asp-route-courseId="@course.CourseId"
+                               class="course-open-btn"
+                               aria-label="View discussion boards for @course.CourseName">
+                                <span aria-hidden="true">→</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>

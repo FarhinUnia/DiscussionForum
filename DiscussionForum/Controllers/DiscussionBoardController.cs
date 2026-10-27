@@ -16,17 +16,32 @@ namespace DiscussionForum.Controllers
             _context = context;
         }
 
-        public IActionResult Index()
-        {
-            var boards = _context.DiscussionBoards.ToList();
 
-            return View(boards);
+        public IActionResult Index(int? courseId)
+        {
+            var boards = _context.DiscussionBoards.AsQueryable();
+
+            if (courseId.HasValue)
+            {
+                boards = boards.Where(b => b.CourseId == courseId.Value);
+                ViewBag.CourseId = courseId.Value;
+            }
+
+            return View(boards.ToList());
         }
 
-        public IActionResult Create()
+
+
+        public IActionResult Create(int? courseId)
         {
+            if (courseId.HasValue)
+            {
+                ViewBag.CourseId = courseId.Value;
+            }
+
             return View();
         }
+
 
         [HttpPost]
         public IActionResult Create(DiscussionBoard board)

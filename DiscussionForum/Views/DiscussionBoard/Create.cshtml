@@ -33,11 +33,14 @@
                             Course ID
                         </label>
 
+                       
                         <input asp-for="CourseId"
                                type="number"
                                min="1"
                                class="form-control"
-                               placeholder="Enter course ID" />
+                               value="@ViewBag.CourseId"
+                               readonly />
+
 
                         <span asp-validation-for="CourseId" class="text-danger"></span>
 
