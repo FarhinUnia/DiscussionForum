@@ -271,21 +271,49 @@
     }
 }
 
-/* Reply button */
-.reply-button {
+
+/* Reply, Edit and Delete buttons */
+
+.reply-actions {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    flex-wrap: nowrap;
+    gap: 10px;
+    margin-top: 12px;
+}
+
+    .reply-actions form {
+        display: inline-flex;
+        align-items: center;
+        flex-shrink: 0;
+        margin: 0;
+        padding: 0;
+    }
+
+.reply-button,
+.edit-reply-button,
+.delete-reply-button {
     display: inline-flex;
+    flex-shrink: 0;
     align-items: center;
     justify-content: center;
     padding: 8px 16px;
-    margin-top: 12px;
-    background: #eef4ff;
-    color: #0d6efd;
-    border: 1px solid #cbdcff;
+    margin: 0;
+    white-space: nowrap;
     border-radius: 8px;
     font-size: 13px;
     font-weight: 600;
+    text-decoration: none;
     cursor: pointer;
     transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+}
+
+/* Reply */
+.reply-button {
+    background: #eef4ff;
+    color: #0d6efd;
+    border: 1px solid #cbdcff;
 }
 
     .reply-button:hover {
@@ -297,4 +325,30 @@
     .reply-button:focus-visible {
         outline: 3px solid rgba(13, 110, 253, 0.25);
         outline-offset: 2px;
+    }
+
+/* Edit */
+.edit-reply-button {
+    background: #ffffff;
+    color: #49566a;
+    border: 1px solid #d5dce5;
+}
+
+    .edit-reply-button:hover {
+        background: #eef4ff;
+        color: #0d6efd;
+        border-color: #cbdcff;
+    }
+
+/* Delete */
+.delete-reply-button {
+    background: #fff5f5;
+    color: #c62828;
+    border: 1px solid #f1caca;
+}
+
+    .delete-reply-button:hover {
+        background: #c62828;
+        color: #ffffff;
+        border-color: #c62828;
     }

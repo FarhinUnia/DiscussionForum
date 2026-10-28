@@ -156,6 +156,111 @@ namespace DiscussionForum.Controllers
         }
 
 
+        // Display the edit reply page
+        public async Task<IActionResult> EditReply(int id)
+        {
+            var reply = await _context.Replies
+                .FirstOrDefaultAsync(r => r.ReplyId == id);
+
+            if (reply == null)
+            {
+                return NotFound("Reply not found.");
+            }
+
+            return View(reply);
+        }
+
+        // Save the edited reply
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> EditReply(int id, string content)
+        {
+            var reply = await _context.Replies
+                .FirstOrDefaultAsync(r => r.ReplyId == id);
+
+            if (reply == null)
+            {
+                return NotFound("Reply not found.");
+            }
+
+            if (string.IsNullOrWhiteSpace(content))
+            {
+                ModelState.AddModelError(
+                    "content", "Reply cannot be empty.");
+
+                return View(reply);
+            }
+
+            content = content.Trim();
+
+            if (content.Length > 1000)
+            {
+                ModelState.AddModelError(
+                    "content", "Reply cannot exceed 1000 characters.");
+
+                return View(reply);
+            }
+
+            reply.Content = content;
+
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction(
+                "Details", new { id = reply.TopicId });
+        }
+
+
+        // Delete a reply and all replies nested under it
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteReply(int id)
+        {
+            var reply = await _context.Replies
+                .FirstOrDefaultAsync(r => r.ReplyId == id);
+
+            if (reply == null)
+            {
+                return NotFound("Reply not found.");
+            }
+
+            int topicId = reply.TopicId;
+
+            // Find the reply and all its nested replies
+            var replies = await _context.Replies
+                .Where(r => r.TopicId == topicId)
+                .ToListAsync();
+
+            var repliesToDelete = new List<Reply> { reply };
+            var parentIds = new HashSet<int> { reply.ReplyId };
+
+            while (true)
+            {
+                var children = replies
+                    .Where(r => r.ParentReplyId.HasValue
+                        && parentIds.Contains(r.ParentReplyId.Value)
+                        && !repliesToDelete.Any(d =>
+                            d.ReplyId == r.ReplyId))
+                    .ToList();
+
+                if (children.Count == 0)
+                {
+                    break;
+                }
+
+                foreach (var child in children)
+                {
+                    repliesToDelete.Add(child);
+                    parentIds.Add(child.ReplyId);
+                }
+            }
+
+            _context.Replies.RemoveRange(repliesToDelete);
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction("Details", new { id = topicId });
+        }
+
+
     }
 }
 

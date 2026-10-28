@@ -32,92 +32,123 @@
         </div>
     </div>
 
-    
-<div class="topic-replies-section">
-    <h2>Replies (@Model.Replies.Count)</h2>
+    <div class="topic-replies-section">
+        <h2>Replies (@Model.Replies.Count)</h2>
 
-    @if (Model.Replies.Any(r => r.ParentReplyId == null))
-    {
-        @foreach (var reply in Model.Replies
-            .Where(r => r.ParentReplyId == null)
-            .OrderBy(r => r.CreatedDate))
+        @if (Model.Replies.Any(r => r.ParentReplyId == null))
         {
-            <div class="topic-reply-card">
-                <p>@reply.Content</p>
+            @foreach (var reply in Model.Replies
+                .Where(r => r.ParentReplyId == null)
+                .OrderBy(r => r.CreatedDate))
+            {
+                <div class="topic-reply-card">
+                    <p>@reply.Content</p>
 
-                <small>
-                    Posted on @reply.CreatedDate.ToString("MMM dd, yyyy h:mm tt")
-                </small>
+                    <small>
+                        Posted on @reply.CreatedDate.ToString("MMM dd, yyyy h:mm tt")
+                    </small>
 
-                <button type="button"
-        class="reply-button"
-        onclick="toggleReplyForm(@reply.ReplyId)">
-    Reply
-</button>
+                    <div class="reply-actions">
+                        <button type="button"
+                                class="reply-button"
+                                onclick="toggleReplyForm(@reply.ReplyId)">
+                            Reply
+                        </button>
 
-                <form asp-controller="Topic"
-                      asp-action="PostReply"
-                      method="post"
-                      id="reply-form-@reply.ReplyId"
-                      style="display:none; margin-top:12px;">
+                        <a asp-controller="Topic"
+                           asp-action="EditReply"
+                           asp-route-id="@reply.ReplyId"
+                           class="edit-reply-button">
+                            Edit
+                        </a>
 
-                    @Html.AntiForgeryToken()
+                        <form asp-controller="Topic"
+                              asp-action="DeleteReply"
+                              asp-route-id="@reply.ReplyId"
+                              method="post"
+                              onsubmit="return confirm('Delete this reply and all its nested replies?');">
 
-                    <input type="hidden"
-                           name="topicId"
-                           value="@Model.TopicId" />
+                            @Html.AntiForgeryToken()
 
-                    <input type="hidden"
-                           name="parentReplyId"
-                           value="@reply.ReplyId" />
-
-                    <textarea name="content"
-                              class="form-control mb-2"
-                              rows="3"
-                              maxlength="1000"
-                              required
-                              placeholder="Write your reply..."></textarea>
-
-                    <button type="submit" class="btn btn-primary btn-sm">
-                        Post Reply
-                    </button>
-                </form>
-
-                @foreach (var child in Model.Replies
-                    .Where(r => r.ParentReplyId == reply.ReplyId)
-                    .OrderBy(r => r.CreatedDate))
-                {
-                   <div class="topic-threaded-reply">
-
-                        <p>@child.Content</p>
-
-                        <small>
-                            Posted on @child.CreatedDate.ToString("MMM dd, yyyy h:mm tt")
-                        </small>
+                            <button type="submit" class="delete-reply-button">
+                                Delete
+                            </button>
+                        </form>
                     </div>
-                }
+
+                    <form asp-controller="Topic"
+                          asp-action="PostReply"
+                          method="post"
+                          id="reply-form-@reply.ReplyId"
+                          style="display:none; margin-top:12px;">
+
+                        @Html.AntiForgeryToken()
+
+                        <input type="hidden"
+                               name="topicId"
+                               value="@Model.TopicId" />
+
+                        <input type="hidden"
+                               name="parentReplyId"
+                               value="@reply.ReplyId" />
+
+                        <textarea name="content"
+                                  class="form-control mb-2"
+                                  rows="3"
+                                  maxlength="1000"
+                                  required
+                                  placeholder="Write your reply..."></textarea>
+
+                        <button type="submit" class="btn btn-primary btn-sm">
+                            Post Reply
+                        </button>
+                    </form>
+
+                    @foreach (var child in Model.Replies
+                        .Where(r => r.ParentReplyId == reply.ReplyId)
+                        .OrderBy(r => r.CreatedDate))
+                    {
+                        <div class="topic-threaded-reply">
+                            <p>@child.Content</p>
+
+                            <small>
+                                Posted on @child.CreatedDate.ToString("MMM dd, yyyy h:mm tt")
+                            </small>
+
+                            <div class="reply-actions">
+                                <a asp-controller="Topic"
+                                   asp-action="EditReply"
+                                   asp-route-id="@child.ReplyId"
+                                   class="edit-reply-button">
+                                    Edit
+                                </a>
+
+                                <form asp-controller="Topic"
+                                      asp-action="DeleteReply"
+                                      asp-route-id="@child.ReplyId"
+                                      method="post"
+                                      onsubmit="return confirm('Delete this reply and all its nested replies?');">
+
+                                    @Html.AntiForgeryToken()
+
+                                    <button type="submit" class="delete-reply-button">
+                                        Delete
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    }
+                </div>
+            }
+        }
+        else
+        {
+            <div class="no-replies-message">
+                <h3>No replies yet</h3>
+                <p>Be the first to reply to this topic.</p>
             </div>
         }
-    }
-    else
-    {
-        <div class="no-replies-message">
-            <h3>No replies yet</h3>
-            <p>Be the first to reply to this topic.</p>
-        </div>
-    }
-</div>
-
-<script>
-    function toggleReplyForm(replyId) {
-        var form = document.getElementById("reply-form-" + replyId);
-
-        if (form) {
-            form.style.display =
-                form.style.display === "none" ? "block" : "none";
-        }
-    }
-</script>
+    </div>
 
     <div class="post-reply-section">
         <h2>Post a Reply</h2>
@@ -128,7 +159,9 @@
 
             @Html.AntiForgeryToken()
 
-            <input type="hidden" name="topicId" value="@Model.TopicId" />
+            <input type="hidden"
+                   name="topicId"
+                   value="@Model.TopicId" />
 
             <div class="mb-3">
                 <label for="content" class="form-label">Your Reply</label>
@@ -164,3 +197,14 @@
     </div>
 
 </div>
+
+<script>
+    function toggleReplyForm(replyId) {
+        var form = document.getElementById("reply-form-" + replyId);
+
+        if (form) {
+            form.style.display =
+                form.style.display === "none" ? "block" : "none";
+        }
+    }
+</script>

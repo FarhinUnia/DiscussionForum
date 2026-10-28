@@ -1,0 +1,52 @@
+﻿
+@model DiscussionForum.Models.Reply
+
+@{
+    ViewData["Title"] = "Edit Reply";
+    ViewData["PageCss"] = "topicdetails.css";
+}
+
+<div class="topic-details-page">
+    <div class="post-reply-section">
+        <h2>Edit Reply</h2>
+
+        <form asp-controller="Topic"
+              asp-action="EditReply"
+              asp-route-id="@Model.ReplyId"
+              method="post">
+
+            @Html.AntiForgeryToken()
+
+            <div asp-validation-summary="ModelOnly"
+                 class="text-danger mb-3"></div>
+
+            <div class="mb-3">
+                <label for="content" class="form-label">
+                    Your Reply
+                </label>
+
+                <textarea id="content"
+                          name="content"
+                          class="form-control"
+                          rows="4"
+                          maxlength="1000"
+                          required>@Model.Content</textarea>
+
+                @Html.ValidationMessage(
+                    "content", null,
+                    new { @class = "text-danger" })
+            </div>
+
+            <button type="submit" class="btn btn-primary">
+                Save Changes
+            </button>
+
+            <a asp-controller="Topic"
+               asp-action="Details"
+               asp-route-id="@Model.TopicId"
+               class="back-to-board-btn">
+                Cancel
+            </a>
+        </form>
+    </div>
+</div>
