@@ -1,3 +1,4 @@
+
 using DiscussionForum.Data;
 using Microsoft.EntityFrameworkCore;
 
@@ -7,22 +8,48 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(
         builder.Configuration.GetConnectionString("DefaultConnection")));
 
-// Add services to the container.
 builder.Services.AddControllersWithViews();
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
+// Wait for SQL Server and apply database migrations.
+using (var scope = app.Services.CreateScope())
+{
+    var db = scope.ServiceProvider
+        .GetRequiredService<ApplicationDbContext>();
+
+    var retries = 10;
+
+    for (int attempt = 1; attempt <= retries; attempt++)
+    {
+        try
+        {
+            await db.Database.MigrateAsync();
+            Console.WriteLine("Database migrations applied successfully.");
+            break;
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Database migration attempt {attempt} failed:");
+            Console.WriteLine(ex.Message);
+
+            if (attempt == retries)
+            {
+                throw;
+            }
+
+            await Task.Delay(3000);
+        }
+    }
+}
+
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
 
-app.UseHttpsRedirection();
 app.UseRouting();
-
 app.UseAuthorization();
 
 app.MapStaticAssets();
@@ -31,6 +58,5 @@ app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}")
     .WithStaticAssets();
-
 
 app.Run();
