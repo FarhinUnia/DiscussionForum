@@ -1,0 +1,91 @@
+﻿@model IEnumerable<DiscussionForum.Models.DiscussionBoard>
+
+@{
+    ViewData["Title"] = "Discussion Forums";
+}
+
+<link rel="stylesheet" href="~/css/discussion-board.css" />
+
+<div class="container discussion-page">
+
+
+<div class="discussion-hero">
+
+    <div class="row align-items-center">
+        <div class="col">
+            <h1>Discussion Forums</h1>
+            <p>
+                Connect with your classmates, share ideas, ask questions,
+                and participate in course discussions.
+            </p>
+        </div>
+        <div class="col-auto ms-auto">
+            <a asp-controller="DiscussionBoard"
+               asp-action="Create"
+               asp-route-courseId="@ViewBag.CourseId"
+               class="create-board-btn">
+                + Create Discussion Board
+            </a>
+        </div>
+    </div>
+</div>
+
+
+    @if (!Model.Any())
+    {
+        <div class="empty-discussion">
+            <h4>No Discussion Boards Yet</h4>
+            <p>Create your first discussion board to get started.</p>
+        </div>
+    }
+    else
+    {
+        <div class="row g-4">
+
+            @foreach (var board in Model)
+            {
+                <div class="col-md-6 col-lg-4">
+
+                    <div class="discussion-card">
+
+                        <h4>@board.Title</h4>
+
+                        <p class="discussion-description">
+                            @board.Description
+                        </p>
+
+                        <div class="discussion-info">
+
+                            <strong>Course:</strong>
+                            @board.CourseId
+
+                            <br />
+
+                            <strong>Created:</strong>
+                            @board.CreatedDate.ToString("MMM dd, yyyy")
+
+                        </div>
+
+                       <a asp-controller="DiscussionBoard"
+                          asp-action="ViewDiscussion"
+                          asp-route-id="@board.BoardId"
+                           class="btn btn-outline-primary">
+                           View Discussion →
+                         </a>
+
+                    </div>
+
+                </div>
+            }
+
+        </div>
+    }
+
+</div>
+     <div class="mb-3">
+    <a asp-controller="Courses"
+       asp-action="Index"
+       class="back-to-courses-btn">
+        &larr; Back to Courses
+    </a>
+</div>

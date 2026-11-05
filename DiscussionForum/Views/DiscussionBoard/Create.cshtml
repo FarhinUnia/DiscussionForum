@@ -1,0 +1,125 @@
+﻿@model DiscussionForum.Models.DiscussionBoard
+
+@{
+    ViewData["Title"] = "Create Discussion Board";
+}
+
+<link rel="stylesheet" href="~/css/discussion-board.css" />
+
+<div class="container create-page">
+
+    <div class="row justify-content-center">
+
+        <div class="col-lg-8">
+
+            <div class="create-header">
+
+                <h1>Create Discussion Board</h1>
+
+                <p>
+                    Create a new discussion space for your course.
+                </p>
+
+            </div>
+
+
+            <div class="create-form-card">
+
+                <form asp-action="Create" method="post">
+
+                    <div class="mb-4">
+
+                        <label asp-for="CourseId" class="form-label">
+                            Course ID
+                        </label>
+
+                       
+                        <input asp-for="CourseId"
+                               type="number"
+                               min="1"
+                               class="form-control"
+                               value="@ViewBag.CourseId"
+                               readonly />
+
+
+                        <span asp-validation-for="CourseId" class="text-danger"></span>
+
+                    </div>
+
+
+                    <div class="mb-4">
+
+                        <label asp-for="Title" class="form-label">
+                            Discussion Board Title
+                        </label>
+
+                        <input asp-for="Title"
+                               class="form-control"
+                               placeholder="e.g., General Discussion" />
+
+                        <span asp-validation-for="Title" class="text-danger"></span>
+
+                    </div>
+
+
+                    <div class="mb-4">
+
+                        <label asp-for="Description" class="form-label">
+                            Description
+                        </label>
+
+                        <textarea asp-for="Description"
+                                  class="form-control"
+                                  placeholder="Enter a short description for this discussion board"></textarea>
+                        <span asp-validation-for="Description" class="text-danger"></span>
+                    </div>
+
+
+                    <div class="create-actions">
+
+                        <button type="submit"
+                                id="createBoardBtn"
+                                class="btn btn-primary">
+                            Create Board
+                        </button>
+
+                        <a asp-action="Index"
+                           class="btn btn-outline-secondary">
+                            Cancel
+                        </a>
+
+                    </div>
+
+                </form>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+
+    <script>
+        function checkForm() {
+            var courseId = $("#CourseId").val();
+            var title = $("#Title").val().trim();
+            var description = $("#Description").val().trim();
+
+            var valid =
+                courseId >= 1 &&
+                title.length >= 3 &&
+                title.length <= 100 &&
+                description.length >= 5 &&
+                description.length <= 500;
+
+            $("#createBoardBtn").prop("disabled", !valid);
+        }
+
+        $("#CourseId, #Title, #Description").on("input", checkForm);
+
+        checkForm();
+    </script>
+}

@@ -8,7 +8,7 @@ namespace DiscussionForum.Controllers
     {
         public IActionResult Index()
         {
-            return View();
+            return RedirectToAction("Index", "Courses");
         }
 
         public IActionResult Privacy()

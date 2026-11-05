@@ -6,8 +6,13 @@
     <title>@ViewData["Title"] - DiscussionForum</title>
     <script type="importmap"></script>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/discussion-board.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/DiscussionForum.styles.css" asp-append-version="true" />
+    @if (ViewData["PageCss"] != null)
+    {
+        <link rel="stylesheet" href="~/css/@ViewData["PageCss"]" asp-append-version="true" />
+    }
 </head>
 <body>
     <header>
@@ -22,6 +27,11 @@
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="DiscussionBoard" asp-action="Index">
+                                Discussion Boards
+                            </a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
