@@ -12,33 +12,36 @@ builder.Services.AddControllersWithViews();
 
 var app = builder.Build();
 
-// Wait for SQL Server and apply database migrations.
-using (var scope = app.Services.CreateScope())
+if (!app.Environment.IsEnvironment("Testing"))
 {
-    var db = scope.ServiceProvider
-        .GetRequiredService<ApplicationDbContext>();
-
-    var retries = 10;
-
-    for (int attempt = 1; attempt <= retries; attempt++)
+    // Wait for SQL Server and apply database migrations.
+    using (var scope = app.Services.CreateScope())
     {
-        try
-        {
-            await db.Database.MigrateAsync();
-            Console.WriteLine("Database migrations applied successfully.");
-            break;
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine($"Database migration attempt {attempt} failed:");
-            Console.WriteLine(ex.Message);
+        var db = scope.ServiceProvider
+            .GetRequiredService<ApplicationDbContext>();
 
-            if (attempt == retries)
+        var retries = 10;
+
+        for (int attempt = 1; attempt <= retries; attempt++)
+        {
+            try
             {
-                throw;
+                await db.Database.MigrateAsync();
+                Console.WriteLine("Database migrations applied successfully.");
+                break;
             }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Database migration attempt {attempt} failed:");
+                Console.WriteLine(ex.Message);
 
-            await Task.Delay(3000);
+                if (attempt == retries)
+                {
+                    throw;
+                }
+
+                await Task.Delay(3000);
+            }
         }
     }
 }
@@ -60,3 +63,5 @@ app.MapControllerRoute(
     .WithStaticAssets();
 
 app.Run();
+
+public partial class Program { }
