@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace DiscussionForum.Models
 {
@@ -14,19 +15,22 @@ namespace DiscussionForum.Models
             ErrorMessage = "Reply must be between 1 and 1000 characters.")]
         public string Content { get; set; } = string.Empty;
 
-        public DateTime CreatedDate { get; set; } = DateTime.Now;
+        public DateTime CreatedDate { get; set; } = DateTime.UtcNow;
 
         [Required]
         public int TopicId { get; set; }
 
+        [JsonIgnore]
         public Topic? Topic { get; set; }
 
-        // Null means this is a direct reply to the topic.
-        // A value means this reply belongs to another reply.
+        // Null means a direct reply to the topic.
+        // A value means a nested reply.
         public int? ParentReplyId { get; set; }
 
+        [JsonIgnore]
         public Reply? ParentReply { get; set; }
 
+        [JsonIgnore]
         public ICollection<Reply> ChildReplies { get; set; }
             = new List<Reply>();
     }
