@@ -17,6 +17,13 @@ namespace DiscussionForum.Models
 
         public DateTime CreatedDate { get; set; } = DateTime.UtcNow;
 
+        // Identity of the user who created this reply
+        [StringLength(128)]
+        public string? CreatedByUserId { get; set; }
+
+        [StringLength(100)]
+        public string? CreatedByName { get; set; }
+
         [Required]
         public int TopicId { get; set; }
 

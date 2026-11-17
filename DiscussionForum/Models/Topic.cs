@@ -26,6 +26,13 @@ namespace DiscussionForum.Models
 
         public DateTime CreatedDate { get; set; } = DateTime.UtcNow;
 
+        // Identity of the user who created this topic
+        [StringLength(128)]
+        public string? CreatedByUserId { get; set; }
+
+        [StringLength(100)]
+        public string? CreatedByName { get; set; }
+
         [JsonIgnore]
         public DiscussionBoard? DiscussionBoard { get; set; }
 

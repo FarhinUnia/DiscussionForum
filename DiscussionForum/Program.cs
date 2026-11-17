@@ -1,4 +1,4 @@
-
+using DiscussionForum.Services;
 using DiscussionForum.Data;
 using Microsoft.EntityFrameworkCore;
 
@@ -9,6 +9,17 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
         builder.Configuration.GetConnectionString("DefaultConnection")));
 
 builder.Services.AddControllersWithViews();
+
+builder.Services.AddHttpContextAccessor();
+
+builder.Services.AddHttpClient("IdentityApi", client =>
+{
+    client.BaseAddress = new Uri(
+        builder.Configuration["Identity:BaseUrl"]
+        ?? "http://host.docker.internal:3000/01-identity-users/");
+});
+
+builder.Services.AddScoped<IdentityService>();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 

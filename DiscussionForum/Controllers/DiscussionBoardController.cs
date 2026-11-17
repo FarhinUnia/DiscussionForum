@@ -2,6 +2,7 @@
 using DiscussionForum.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Linq;
+using DiscussionForum.Services;
 using Microsoft.EntityFrameworkCore;
 
 
@@ -10,10 +11,14 @@ namespace DiscussionForum.Controllers
     public class DiscussionBoardController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly IdentityService _identityService;
 
-        public DiscussionBoardController(ApplicationDbContext context)
+        public DiscussionBoardController(
+            ApplicationDbContext context,
+            IdentityService identityService)
         {
             _context = context;
+            _identityService = identityService;
         }
 
 
@@ -77,8 +82,19 @@ namespace DiscussionForum.Controllers
                 .OrderByDescending(t => t.CreatedDate)
                 .ToListAsync();
 
+            // Get the currently logged-in user
+            var currentUser =
+                await _identityService.GetCurrentUserAsync(HttpContext);
+
+            // Pass user information to the view
+            ViewBag.CurrentUserId = currentUser?.Id;
+
+            ViewBag.IsAdmin = string.Equals(
+                currentUser?.Role,
+                "admin",
+                StringComparison.OrdinalIgnoreCase);
+
             return View(board);
         }
-
     }
 }
