@@ -1,10 +1,9 @@
-﻿using DiscussionForum.Data;
+﻿
+using DiscussionForum.Data;
 using DiscussionForum.Models;
-using Microsoft.AspNetCore.Mvc;
-using System.Linq;
 using DiscussionForum.Services;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-
 
 namespace DiscussionForum.Controllers
 {
@@ -21,8 +20,20 @@ namespace DiscussionForum.Controllers
             _identityService = identityService;
         }
 
+        // Check whether the current user is an admin
+        private async Task<bool> IsAdminAsync()
+        {
+            var currentUser =
+                await _identityService.GetCurrentUserAsync(HttpContext);
 
-        public IActionResult Index(int? courseId)
+            return string.Equals(
+                currentUser?.Role,
+                "admin",
+                StringComparison.OrdinalIgnoreCase);
+        }
+
+        // Display discussion boards
+        public async Task<IActionResult> Index(int? courseId)
         {
             var boards = _context.DiscussionBoards.AsQueryable();
 
@@ -32,13 +43,22 @@ namespace DiscussionForum.Controllers
                 ViewBag.CourseId = courseId.Value;
             }
 
-            return View(boards.ToList());
+            ViewBag.IsAdmin = await IsAdminAsync();
+
+            return View(await boards.ToListAsync());
         }
 
-
-
-        public IActionResult Create(int? courseId)
+        // Display Create Board page (Admin only)
+        public async Task<IActionResult> Create(int? courseId)
         {
+            if (!await IsAdminAsync())
+            {
+                TempData["ErrorMessage"] =
+                    "Only administrators can create discussion boards.";
+
+                return RedirectToAction("Index", new { courseId });
+            }
+
             if (courseId.HasValue)
             {
                 ViewBag.CourseId = courseId.Value;
@@ -47,16 +67,22 @@ namespace DiscussionForum.Controllers
             return View();
         }
 
-
+        // Save new discussion board (Admin only)
         [HttpPost]
-        public IActionResult Create(DiscussionBoard board)
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Create(DiscussionBoard board)
         {
+            if (!await IsAdminAsync())
+            {
+                return Forbid();
+            }
+
             if (ModelState.IsValid)
             {
                 board.CreatedDate = DateTime.Now;
 
                 _context.DiscussionBoards.Add(board);
-                _context.SaveChanges();
+                await _context.SaveChangesAsync();
 
                 return RedirectToAction("Index");
             }
@@ -64,9 +90,7 @@ namespace DiscussionForum.Controllers
             return View(board);
         }
 
-
-
-
+        // View a discussion board (All logged-in users)
         public async Task<IActionResult> ViewDiscussion(int id)
         {
             var board = await _context.DiscussionBoards
@@ -82,11 +106,9 @@ namespace DiscussionForum.Controllers
                 .OrderByDescending(t => t.CreatedDate)
                 .ToListAsync();
 
-            // Get the currently logged-in user
             var currentUser =
                 await _identityService.GetCurrentUserAsync(HttpContext);
 
-            // Pass user information to the view
             ViewBag.CurrentUserId = currentUser?.Id;
 
             ViewBag.IsAdmin = string.Equals(
