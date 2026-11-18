@@ -74,7 +74,7 @@ namespace DiscussionForum.Controllers
         {
             if (!await IsAdminAsync())
             {
-                return Forbid();
+                return StatusCode(StatusCodes.Status403Forbidden);
             }
 
             if (ModelState.IsValid)

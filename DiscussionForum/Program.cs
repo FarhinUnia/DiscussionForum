@@ -17,6 +17,12 @@ builder.Services.AddHttpClient("IdentityApi", client =>
     client.BaseAddress = new Uri(
         builder.Configuration["Identity:BaseUrl"]
         ?? "http://host.docker.internal:3000/01-identity-users/");
+})
+.ConfigurePrimaryHttpMessageHandler(() => new HttpClientHandler
+{
+    // IdentityService forwards cookies separately for each browser request.
+    // Do not store and reuse cookies across users.
+    UseCookies = false
 });
 
 builder.Services.AddScoped<IdentityService>();

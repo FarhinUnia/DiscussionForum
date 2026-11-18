@@ -53,7 +53,15 @@ namespace DiscussionForum.Services
                     PropertyNameCaseInsensitive = true
                 });
 
-            return result?.User;
+            var user = result?.User;
+
+            // A stable user ID is required for author and ownership checks.
+            if (user == null || string.IsNullOrWhiteSpace(user.Id))
+            {
+                return null;
+            }
+
+            return user;
         }
     }
 
