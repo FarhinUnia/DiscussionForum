@@ -4,7 +4,9 @@
    ================================ */
 
 .view-discussion-page {
-    padding: 50px 0 70px;
+    max-width: 1150px;
+    margin: 0 auto;
+    padding: 45px 20px 70px;
 }
 
 /* Discussion Board Header */
@@ -14,8 +16,8 @@
     color: white;
     border-radius: 18px;
     padding: 35px 40px;
-    margin-bottom: 35px;
-    box-shadow: 0 10px 30px rgba(13, 110, 253, 0.20);
+    margin-bottom: 40px;
+    box-shadow: 0 8px 25px rgba(13, 110, 253, 0.16);
 }
 
     .view-discussion-hero h1 {
@@ -53,7 +55,7 @@
         font-size: 26px;
         font-weight: 700;
         color: #212529;
-        margin-bottom: 8px;
+        margin-bottom: 6px;
     }
 
     .topics-section-header p {
@@ -64,7 +66,9 @@
 /* Create Topic Button */
 
 .create-topic-btn {
-    display: inline-block;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
     background: #0d6efd;
     color: white;
     padding: 11px 20px;
@@ -84,70 +88,120 @@
 /* Individual Topic Cards */
 
 .view-topic-card {
-    background: white;
-    border: 1px solid #e9ecef;
-    border-radius: 14px;
-    padding: 25px;
+    background: #ffffff;
+    border: 1px solid #e5eaf2;
+    border-radius: 15px;
+    padding: 25px 28px;
     margin-bottom: 18px;
-    box-shadow: 0 4px 18px rgba(0, 0, 0, 0.06);
-    transition: all 0.25s ease;
+    box-shadow: 0 3px 12px rgba(0, 0, 0, 0.04);
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
     .view-topic-card:hover {
         border-color: #b6d0ff;
-        transform: translateY(-3px);
-        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.10);
+        box-shadow: 0 7px 20px rgba(13, 110, 253, 0.08);
     }
 
     .view-topic-card h3 {
         font-size: 21px;
         font-weight: 700;
-        margin-bottom: 12px;
+        margin-bottom: 10px;
     }
 
         .view-topic-card h3 a {
-            color: #0d6efd;
+            color: #174ea6;
             text-decoration: none;
         }
 
             .view-topic-card h3 a:hover {
-                color: #084298;
+                color: #0d6efd;
                 text-decoration: underline;
             }
 
 .view-topic-description {
-    color: #6c757d;
+    color: #606b78;
     line-height: 1.7;
-    margin-bottom: 20px;
+    margin-bottom: 18px;
 }
+
+/* Topic Footer */
 
 .view-topic-footer {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    gap: 12px;
+    flex-wrap: wrap;
+    gap: 15px;
     border-top: 1px solid #edf0f5;
-    padding-top: 15px;
+    padding-top: 17px;
     font-size: 14px;
-    color: #6c757d;
+    color: #788391;
+}
+
+.view-topic-actions {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 9px;
 }
 
 .view-topic-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: #eaf2ff;
     color: #0d6efd;
+    border: 1px solid #cfe0ff;
+    padding: 8px 15px;
+    border-radius: 7px;
     font-weight: 600;
     text-decoration: none;
+    transition: all 0.2s ease;
 }
 
     .view-topic-link:hover {
+        background: #d8e7ff;
         color: #084298;
-        text-decoration: underline;
     }
+
+.view-topic-actions .btn {
+    border-radius: 7px;
+    padding: 8px 14px;
+    font-size: 13px;
+    font-weight: 600;
+    transition: all 0.2s ease;
+}
+
+.view-topic-actions .btn-outline-primary {
+    border-color: #0d6efd;
+    color: #0d6efd;
+}
+
+    .view-topic-actions .btn-outline-primary:hover {
+        background: #0d6efd;
+        color: #ffffff;
+    }
+
+.view-topic-actions .btn-danger {
+    background: #dc3545;
+    border-color: #dc3545;
+}
+
+    .view-topic-actions .btn-danger:hover {
+        background: #bb2d3b;
+        border-color: #bb2d3b;
+    }
+
+.view-topic-actions form {
+    display: inline-flex;
+    margin: 0;
+}
 
 /* Empty Topics Message */
 
 .no-topics-message {
-    background: #f8f9fa;
-    border: 1px dashed #ced4da;
+    background: #f8faff;
+    border: 1px dashed #cbd7e8;
     border-radius: 14px;
     padding: 45px 25px;
     text-align: center;
@@ -182,9 +236,9 @@
 
 /* Responsive Design */
 
-@media (max-width: 600px) {
+@media (max-width: 650px) {
     .view-discussion-page {
-        padding: 25px 0 45px;
+        padding: 25px 15px 45px;
     }
 
     .view-discussion-hero {
@@ -207,5 +261,9 @@
     .view-topic-footer {
         align-items: flex-start;
         flex-direction: column;
+    }
+
+    .view-topic-actions {
+        width: 100%;
     }
 }

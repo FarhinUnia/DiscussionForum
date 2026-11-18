@@ -1,12 +1,21 @@
-﻿
-@model DiscussionForum.Models.Topic
+﻿@model DiscussionForum.Models.Topic
 
 @{
     ViewData["Title"] = "Topic Details";
     ViewData["PageCss"] = "topicdetails.css";
+
+    string? currentUserId = ViewBag.CurrentUserId as string;
+    bool isAdmin = ViewBag.IsAdmin == true;
 }
 
 <div class="topic-details-page">
+
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div class="alert alert-danger" role="alert">
+            @TempData["ErrorMessage"]
+        </div>
+    }
 
     <div class="topic-details-hero">
         <h1>@Model.Title</h1>
@@ -30,6 +39,11 @@
             <span>Created On</span>
             <strong>@Model.CreatedDate.ToString("MMM dd, yyyy")</strong>
         </div>
+
+        <div class="topic-info-card">
+            <span>Created By</span>
+            <strong>@(Model.CreatedByName ?? "Unknown")</strong>
+        </div>
     </div>
 
     <div class="topic-replies-section">
@@ -42,38 +56,47 @@
                 .OrderBy(r => r.CreatedDate))
             {
                 <div class="topic-reply-card">
+
                     <p>@reply.Content</p>
 
                     <small>
-                        Posted on @reply.CreatedDate.ToString("MMM dd, yyyy h:mm tt")
+                        Posted by @(reply.CreatedByName ?? "Unknown")
+                        on @reply.CreatedDate.ToString("MMM dd, yyyy h:mm tt")
                     </small>
 
                     <div class="reply-actions">
+
                         <button type="button"
                                 class="reply-button"
                                 onclick="toggleReplyForm(@reply.ReplyId)">
                             Reply
                         </button>
 
-                        <a asp-controller="Topic"
-                           asp-action="EditReply"
-                           asp-route-id="@reply.ReplyId"
-                           class="edit-reply-button">
-                            Edit
-                        </a>
+                        @if (isAdmin ||
+                            (!string.IsNullOrEmpty(currentUserId) &&
+                             currentUserId == reply.CreatedByUserId))
+                        {
+                            <a asp-controller="Topic"
+                               asp-action="EditReply"
+                               asp-route-id="@reply.ReplyId"
+                               class="edit-reply-button">
+                                Edit
+                            </a>
 
-                        <form asp-controller="Topic"
-                              asp-action="DeleteReply"
-                              asp-route-id="@reply.ReplyId"
-                              method="post"
-                              onsubmit="return confirm('Delete this reply and all its nested replies?');">
+                            <form asp-controller="Topic"
+                                  asp-action="DeleteReply"
+                                  asp-route-id="@reply.ReplyId"
+                                  method="post"
+                                  onsubmit="return confirm('Delete this reply and all its nested replies?');">
 
-                            @Html.AntiForgeryToken()
+                                @Html.AntiForgeryToken()
 
-                            <button type="submit" class="delete-reply-button">
-                                Delete
-                            </button>
-                        </form>
+                                <button type="submit" class="delete-reply-button">
+                                    Delete
+                                </button>
+                            </form>
+                        }
+
                     </div>
 
                     <form asp-controller="Topic"
@@ -109,35 +132,45 @@
                         .OrderBy(r => r.CreatedDate))
                     {
                         <div class="topic-threaded-reply">
+
                             <p>@child.Content</p>
 
                             <small>
-                                Posted on @child.CreatedDate.ToString("MMM dd, yyyy h:mm tt")
+                                Posted by @(child.CreatedByName ?? "Unknown")
+                                on @child.CreatedDate.ToString("MMM dd, yyyy h:mm tt")
                             </small>
 
                             <div class="reply-actions">
-                                <a asp-controller="Topic"
-                                   asp-action="EditReply"
-                                   asp-route-id="@child.ReplyId"
-                                   class="edit-reply-button">
-                                    Edit
-                                </a>
 
-                                <form asp-controller="Topic"
-                                      asp-action="DeleteReply"
-                                      asp-route-id="@child.ReplyId"
-                                      method="post"
-                                      onsubmit="return confirm('Delete this reply and all its nested replies?');">
+                                @if (isAdmin ||
+                                    (!string.IsNullOrEmpty(currentUserId) &&
+                                     currentUserId == child.CreatedByUserId))
+                                {
+                                    <a asp-controller="Topic"
+                                       asp-action="EditReply"
+                                       asp-route-id="@child.ReplyId"
+                                       class="edit-reply-button">
+                                        Edit
+                                    </a>
 
-                                    @Html.AntiForgeryToken()
+                                    <form asp-controller="Topic"
+                                          asp-action="DeleteReply"
+                                          asp-route-id="@child.ReplyId"
+                                          method="post"
+                                          onsubmit="return confirm('Delete this reply and all its nested replies?');">
 
-                                    <button type="submit" class="delete-reply-button">
-                                        Delete
-                                    </button>
-                                </form>
+                                        @Html.AntiForgeryToken()
+
+                                        <button type="submit" class="delete-reply-button">
+                                            Delete
+                                        </button>
+                                    </form>
+                                }
+
                             </div>
                         </div>
                     }
+
                 </div>
             }
         }
@@ -180,8 +213,9 @@
             </button>
         </form>
     </div>
-
+   
     <div class="topic-details-actions">
+
         <a asp-controller="DiscussionBoard"
            asp-action="ViewDiscussion"
            asp-route-id="@Model.BoardId"
@@ -194,6 +228,7 @@
            class="back-to-boards-btn">
             All Discussion Boards
         </a>
+
     </div>
 
 </div>

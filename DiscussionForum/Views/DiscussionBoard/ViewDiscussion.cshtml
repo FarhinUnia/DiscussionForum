@@ -1,22 +1,41 @@
-﻿@model DiscussionForum.Models.DiscussionBoard
+﻿
+@model DiscussionForum.Models.DiscussionBoard
 
 @{
     ViewData["PageCss"] = "viewdiscussion.css";
     ViewData["Title"] = "View Discussion";
+
+    string? currentUserId = ViewBag.CurrentUserId as string;
+    bool isAdmin = ViewBag.IsAdmin == true;
 }
 
 <div class="view-discussion-page">
 
+    <!-- Discussion Board Header -->
     <div class="view-discussion-hero">
         <h1>@Model.Title</h1>
 
-        <p>@Model.Description</p>
-
-        <span class="view-course-info">
-            Course ID: @Model.CourseId
-        </span>
+        <p>
+            @Model.Description
+        </p>
     </div>
 
+    <!-- Success and Error Messages -->
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success">
+            @TempData["SuccessMessage"]
+        </div>
+    }
+
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div class="alert alert-danger">
+            @TempData["ErrorMessage"]
+        </div>
+    }
+
+    <!-- Topics Section Header -->
     <div class="topics-section-header">
         <div>
             <h2>Discussion Topics</h2>
@@ -31,12 +50,14 @@
         </a>
     </div>
 
+    <!-- Topics List -->
     @if (Model.Topics != null && Model.Topics.Any())
     {
-        @foreach (var topic in Model.Topics.OrderByDescending(t => t.CreatedDate))
+        foreach (var topic in Model.Topics)
         {
             <div class="view-topic-card">
 
+                <!-- Topic Information -->
                 <h3>
                     <a asp-controller="Topic"
                        asp-action="Details"
@@ -49,32 +70,66 @@
                     @topic.Description
                 </p>
 
+                <!-- Topic Footer -->
                 <div class="view-topic-footer">
+
                     <span>
                         Created: @topic.CreatedDate.ToString("yyyy-MM-dd HH:mm")
                     </span>
 
-                    <a asp-controller="Topic"
-                       asp-action="Details"
-                       asp-route-id="@topic.TopicId"
-                       class="view-topic-link">
-                        View Topic →
-                    </a>
-                </div>
+                    <!-- Topic Actions -->
+                    <div class="view-topic-actions">
 
+                        <a asp-controller="Topic"
+                           asp-action="Details"
+                           asp-route-id="@topic.TopicId"
+                           class="view-topic-link">
+                            View Topic →
+                        </a>
+
+                        @if (isAdmin ||
+                            (!string.IsNullOrEmpty(currentUserId) &&
+                             currentUserId == topic.CreatedByUserId))
+                        {
+                            <a asp-controller="Topic"
+                               asp-action="Edit"
+                               asp-route-id="@topic.TopicId"
+                               class="btn btn-sm btn-outline-primary">
+                                Edit
+                            </a>
+
+                            <form asp-controller="Topic"
+                                  asp-action="Delete"
+                                  asp-route-id="@topic.TopicId"
+                                  method="post"
+                                  onsubmit="return confirm('Are you sure you want to delete this topic and all its replies?');">
+
+                                @Html.AntiForgeryToken()
+
+                                <button type="submit"
+                                        class="btn btn-sm btn-danger">
+                                    Delete
+                                </button>
+                            </form>
+                        }
+
+                    </div>
+                </div>
             </div>
         }
     }
     else
     {
         <div class="no-topics-message">
-            <h3>No topics yet</h3>
-            <p>Be the first to start a discussion on this board.</p>
+            <h3>No Discussion Topics Yet</h3>
+            <p>Be the first to create a topic and start a conversation.</p>
         </div>
     }
 
+    <!-- Back Button -->
     <a asp-controller="DiscussionBoard"
        asp-action="Index"
+       asp-route-courseId="@Model.CourseId"
        class="back-discussions-btn">
         ← Back to Discussion Boards
     </a>

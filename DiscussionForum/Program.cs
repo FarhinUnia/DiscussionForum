@@ -1,4 +1,4 @@
-
+using DiscussionForum.Services;
 using DiscussionForum.Data;
 using Microsoft.EntityFrameworkCore;
 
@@ -10,35 +10,62 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 
 builder.Services.AddControllersWithViews();
 
-var app = builder.Build();
+builder.Services.AddHttpContextAccessor();
 
-// Wait for SQL Server and apply database migrations.
-using (var scope = app.Services.CreateScope())
+builder.Services.AddHttpClient("IdentityApi", client =>
 {
-    var db = scope.ServiceProvider
-        .GetRequiredService<ApplicationDbContext>();
+    client.BaseAddress = new Uri(
+        builder.Configuration["Identity:BaseUrl"]
+        ?? "http://host.docker.internal:3000/01-identity-users/");
+})
+.ConfigurePrimaryHttpMessageHandler(() => new HttpClientHandler
+{
+    // IdentityService forwards cookies separately for each browser request.
+    // Do not store and reuse cookies across users.
+    UseCookies = false
+});
 
-    var retries = 10;
+builder.Services.AddScoped<IdentityService>();
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
 
-    for (int attempt = 1; attempt <= retries; attempt++)
+var app = builder.Build();
+if (app.Environment.IsDevelopment())
+{
+    app.UseSwagger();
+    app.UseSwaggerUI();
+}
+
+if (!app.Environment.IsEnvironment("Testing"))
+{
+    // Wait for SQL Server and apply database migrations.
+    using (var scope = app.Services.CreateScope())
     {
-        try
-        {
-            await db.Database.MigrateAsync();
-            Console.WriteLine("Database migrations applied successfully.");
-            break;
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine($"Database migration attempt {attempt} failed:");
-            Console.WriteLine(ex.Message);
+        var db = scope.ServiceProvider
+            .GetRequiredService<ApplicationDbContext>();
 
-            if (attempt == retries)
+        var retries = 10;
+
+        for (int attempt = 1; attempt <= retries; attempt++)
+        {
+            try
             {
-                throw;
+                await db.Database.MigrateAsync();
+                Console.WriteLine("Database migrations applied successfully.");
+                break;
             }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Database migration attempt {attempt} failed:");
+                Console.WriteLine(ex.Message);
 
-            await Task.Delay(3000);
+                if (attempt == retries)
+                {
+                    throw;
+                }
+
+                await Task.Delay(3000);
+            }
         }
     }
 }
@@ -60,3 +87,5 @@ app.MapControllerRoute(
     .WithStaticAssets();
 
 app.Run();
+
+public partial class Program { }

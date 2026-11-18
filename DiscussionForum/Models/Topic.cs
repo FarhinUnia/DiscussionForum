@@ -1,6 +1,7 @@
 ﻿
 using System;
 using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace DiscussionForum.Models
 {
@@ -23,10 +24,19 @@ namespace DiscussionForum.Models
             ErrorMessage = "Please select a valid discussion board.")]
         public int BoardId { get; set; }
 
-        public DateTime CreatedDate { get; set; } = DateTime.Now;
+        public DateTime CreatedDate { get; set; } = DateTime.UtcNow;
 
+        // Identity of the user who created this topic
+        [StringLength(128)]
+        public string? CreatedByUserId { get; set; }
+
+        [StringLength(100)]
+        public string? CreatedByName { get; set; }
+
+        [JsonIgnore]
         public DiscussionBoard? DiscussionBoard { get; set; }
 
+        [JsonIgnore]
         public ICollection<Reply> Replies { get; set; } = new List<Reply>();
     }
 }
