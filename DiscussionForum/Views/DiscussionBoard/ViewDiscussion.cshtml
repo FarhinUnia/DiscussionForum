@@ -73,9 +73,13 @@
                 <!-- Topic Footer -->
                 <div class="view-topic-footer">
 
-                    <span>
-                        Created: @topic.CreatedDate.ToString("yyyy-MM-dd HH:mm")
-                    </span>
+                   <span>
+    Created by: @(string.IsNullOrEmpty(topic.CreatedByName)
+        ? "Unknown"
+        : topic.CreatedByName)
+    |
+    Created: @topic.CreatedDate.ToString("yyyy-MM-dd HH:mm")
+</span>
 
                     <!-- Topic Actions -->
                     <div class="view-topic-actions">

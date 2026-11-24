@@ -1,4 +1,4 @@
-﻿
+﻿using System.ComponentModel.DataAnnotations.Schema;
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
@@ -33,6 +33,7 @@ namespace DiscussionForum.Models
         [StringLength(100)]
         public string? CreatedByName { get; set; }
 
+        [ForeignKey(nameof(BoardId))]
         [JsonIgnore]
         public DiscussionBoard? DiscussionBoard { get; set; }
 
