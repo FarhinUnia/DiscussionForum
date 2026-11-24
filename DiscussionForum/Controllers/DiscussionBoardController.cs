@@ -16,8 +16,8 @@ namespace DiscussionForum.Controllers
             ApplicationDbContext context,
             IdentityService identityService)
         {
-            _context = context;
-            _identityService = identityService;
+            _context = context ?? throw new ArgumentNullException(nameof(context));
+            _identityService = identityService ?? throw new ArgumentNullException(nameof(identityService));
         }
 
         // Check whether the current user is an admin
@@ -32,20 +32,36 @@ namespace DiscussionForum.Controllers
                 StringComparison.OrdinalIgnoreCase);
         }
 
-        // Display discussion boards
-        public async Task<IActionResult> Index(int? courseId)
+        // Display discussion boards for the selected course
+        public async Task<IActionResult> Index(int? courseId, int? boardId)
         {
-            var boards = _context.DiscussionBoards.AsQueryable();
-
-            if (courseId.HasValue)
+            // If coming from a topic page, get the course from its discussion board.
+            if (boardId.HasValue)
             {
-                boards = boards.Where(b => b.CourseId == courseId.Value);
-                ViewBag.CourseId = courseId.Value;
+                courseId = await _context.DiscussionBoards
+                    .Where(b => b.BoardId == boardId.Value)
+                    .Select(b => (int?)b.CourseId)
+                    .FirstOrDefaultAsync();
+
+                if (!courseId.HasValue)
+                {
+                    return NotFound("Discussion board not found.");
+                }
             }
 
+            if (!courseId.HasValue)
+            {
+                return RedirectToAction("Index", "Courses");
+            }
+
+            var boards = await _context.DiscussionBoards
+                .Where(b => b.CourseId == courseId.Value)
+                .ToListAsync();
+
+            ViewBag.CourseId = courseId.Value;
             ViewBag.IsAdmin = await IsAdminAsync();
 
-            return View(await boards.ToListAsync());
+            return View(boards);
         }
 
         // Display Create Board page (Admin only)
@@ -77,34 +93,33 @@ namespace DiscussionForum.Controllers
                 return Forbid();
             }
 
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
-                board.CreatedDate = DateTime.Now;
-
-                _context.DiscussionBoards.Add(board);
-                await _context.SaveChangesAsync();
-
-                return RedirectToAction("Index");
+                ViewBag.CourseId = board.CourseId;
+                return View(board);
             }
 
-            return View(board);
+            board.CreatedDate = DateTime.Now;
+
+            _context.DiscussionBoards.Add(board);
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction(
+                "Index",
+                new { courseId = board.CourseId });
         }
 
-        // View a discussion board (All logged-in users)
+        // View a discussion board
         public async Task<IActionResult> ViewDiscussion(int id)
         {
             var board = await _context.DiscussionBoards
+                .Include(b => b.Topics)
                 .FirstOrDefaultAsync(b => b.BoardId == id);
 
             if (board == null)
             {
-                return NotFound();
+                return NotFound("Discussion board not found.");
             }
-
-            board.Topics = await _context.Topics
-                .Where(t => t.BoardId == id)
-                .OrderByDescending(t => t.CreatedDate)
-                .ToListAsync();
 
             var currentUser =
                 await _identityService.GetCurrentUserAsync(HttpContext);

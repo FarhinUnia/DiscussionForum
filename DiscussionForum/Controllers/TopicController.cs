@@ -99,6 +99,7 @@ namespace DiscussionForum.Controllers
         }
 
         // Display topic details and replies
+        // Display topic details and replies
         public async Task<IActionResult> Details(int id)
         {
             var topic = await _context.Topics
@@ -108,7 +109,7 @@ namespace DiscussionForum.Controllers
 
             if (topic == null)
             {
-                return NotFound();
+                return NotFound("Topic not found.");
             }
 
             var currentUser =
@@ -117,7 +118,8 @@ namespace DiscussionForum.Controllers
             ViewBag.CurrentUserId = currentUser?.Id;
 
             ViewBag.IsAdmin = string.Equals(
-                currentUser?.Role, "admin",
+                currentUser?.Role,
+                "admin",
                 StringComparison.OrdinalIgnoreCase);
 
             return View(topic);

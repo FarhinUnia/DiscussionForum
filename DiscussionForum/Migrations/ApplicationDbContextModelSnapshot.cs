@@ -117,9 +117,6 @@ namespace DiscussionForum.Migrations
                         .HasMaxLength(500)
                         .HasColumnType("nvarchar(500)");
 
-                    b.Property<int?>("DiscussionBoardBoardId")
-                        .HasColumnType("int");
-
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasMaxLength(100)
@@ -127,7 +124,7 @@ namespace DiscussionForum.Migrations
 
                     b.HasKey("TopicId");
 
-                    b.HasIndex("DiscussionBoardBoardId");
+                    b.HasIndex("BoardId");
 
                     b.ToTable("Topics");
                 });
@@ -153,7 +150,9 @@ namespace DiscussionForum.Migrations
                 {
                     b.HasOne("DiscussionForum.Models.DiscussionBoard", "DiscussionBoard")
                         .WithMany("Topics")
-                        .HasForeignKey("DiscussionBoardBoardId");
+                        .HasForeignKey("BoardId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("DiscussionBoard");
                 });

@@ -223,11 +223,12 @@
             ← Back to Discussion Board
         </a>
 
-        <a asp-controller="DiscussionBoard"
-           asp-action="Index"
-           class="back-to-boards-btn">
-            All Discussion Boards
-        </a>
+   <a asp-controller="DiscussionBoard"
+   asp-action="Index"
+   asp-route-boardId="@Model.BoardId"
+   class="back-to-boards-btn">
+    All Discussion Boards
+</a>
 
     </div>
 

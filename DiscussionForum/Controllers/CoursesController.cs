@@ -1,5 +1,4 @@
-﻿
-using DiscussionForum.Data;
+﻿using DiscussionForum.Data;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DiscussionForum.Controllers
@@ -9,7 +8,6 @@ namespace DiscussionForum.Controllers
         public IActionResult Index()
         {
             var courses = CourseData.Courses;
-
             return View(courses);
         }
     }
