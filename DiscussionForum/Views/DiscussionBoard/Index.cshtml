@@ -20,12 +20,15 @@
             </p>
         </div>
         <div class="col-auto ms-auto">
-            <a asp-controller="DiscussionBoard"
-               asp-action="Create"
-               asp-route-courseId="@ViewBag.CourseId"
-               class="create-board-btn">
-                + Create Discussion Board
-            </a>
+            @if (ViewBag.IsAdmin == true)
+{
+    <a asp-controller="DiscussionBoard"
+       asp-action="Create"
+       asp-route-courseId="@ViewBag.CourseId"
+       class="btn btn-primary">
+        Create Board
+    </a>
+}
         </div>
     </div>
 </div>

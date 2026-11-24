@@ -64,6 +64,14 @@ namespace DiscussionForum.Migrations
                         .HasMaxLength(1000)
                         .HasColumnType("nvarchar(1000)");
 
+                    b.Property<string>("CreatedByName")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("CreatedByUserId")
+                        .HasMaxLength(128)
+                        .HasColumnType("nvarchar(128)");
+
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
 
@@ -93,6 +101,14 @@ namespace DiscussionForum.Migrations
                     b.Property<int>("BoardId")
                         .HasColumnType("int");
 
+                    b.Property<string>("CreatedByName")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("CreatedByUserId")
+                        .HasMaxLength(128)
+                        .HasColumnType("nvarchar(128)");
+
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
 
@@ -101,9 +117,6 @@ namespace DiscussionForum.Migrations
                         .HasMaxLength(500)
                         .HasColumnType("nvarchar(500)");
 
-                    b.Property<int?>("DiscussionBoardBoardId")
-                        .HasColumnType("int");
-
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasMaxLength(100)
@@ -111,7 +124,7 @@ namespace DiscussionForum.Migrations
 
                     b.HasKey("TopicId");
 
-                    b.HasIndex("DiscussionBoardBoardId");
+                    b.HasIndex("BoardId");
 
                     b.ToTable("Topics");
                 });
@@ -137,7 +150,9 @@ namespace DiscussionForum.Migrations
                 {
                     b.HasOne("DiscussionForum.Models.DiscussionBoard", "DiscussionBoard")
                         .WithMany("Topics")
-                        .HasForeignKey("DiscussionBoardBoardId");
+                        .HasForeignKey("BoardId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("DiscussionBoard");
                 });

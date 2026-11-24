@@ -1,4 +1,5 @@
-﻿services:
+﻿
+services:
   forum-db:
     image: mcr.microsoft.com/mssql/server:2022-latest
     environment:
@@ -23,7 +24,7 @@
       - "127.0.0.1:30707:8080"
     environment:
       ASPNETCORE_ENVIRONMENT: Development
-      ConnectionStrings__DefaultConnection: "Server=forum-db,1433;Database=DiscussionForumDb;User Id=sa;Password=${SA_PASSWORD};TrustServerCertificate=True;Encrypt=False;"
+      ConnectionStrings__DefaultConnection: "Server=forum-db,1433;Database=DiscussionForumDb_Recovered;User Id=sa;Password=${SA_PASSWORD};TrustServerCertificate=True;Encrypt=False;"
     depends_on:
       forum-db:
         condition: service_healthy
